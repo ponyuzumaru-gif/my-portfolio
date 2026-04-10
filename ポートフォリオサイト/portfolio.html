@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Works Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:  #F5F3EE;
+      --paper:  #ECEAE3;
+      --ink:    #111111;
+      --ink-60: #555555;
+      --ink-30: #AAAAAA;
+      --white:  #FFFFFF;
+      --border: #D8D5CE;
+      --red:    #FF3B30;
+      --green:  #34C759;
+      --blue:   #007AFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Inter', 'Noto Sans JP', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-strip {
+      background: var(--ink);
+      color: var(--white);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 10px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .marquee-track {
+      display: inline-flex;
+      animation: ticker 36s linear infinite;
+    }
+    .marquee-item { padding: 0 28px; opacity: 0.65; }
+    .marquee-sep  { color: var(--red); opacity: 1; padding: 0 4px; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--cream);
+      border-bottom: 2px solid var(--ink);
+      display: flex;
+      align-items: stretch;
+    }
+    .nav-brand {
+      font-size: 0.80rem;
+      font-weight: 900;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 17px 28px;
+      border-right: 2px solid var(--ink);
+      display: flex;
+      align-items: center;
+    }
+    .nav-right {
+      margin-left: auto;
+      display: flex;
+      align-items: stretch;
+    }
+    .nav-link {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-60);
+      text-decoration: none;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      border-left: 1px solid var(--border);
+      transition: background 0.18s, color 0.18s;
+    }
+    .nav-link:hover { background: var(--paper); color: var(--ink); }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-right: 8px;
+      animation: blink 2.8s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+    /* ── HERO ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 2px solid var(--ink);
+      min-height: 380px;
+    }
+    .hero-l {
+      padding: 56px 52px 52px;
+      border-right: 2px solid var(--ink);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.70rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-60);
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 30px; height: 1.5px;
+      background: var(--ink);
+      display: block;
+    }
+    .hero-title {
+      font-size: clamp(3rem, 5.5vw, 6rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.045em;
+      text-transform: uppercase;
+    }
+    .hero-title .outline {
+      -webkit-text-stroke: 2.5px var(--ink);
+      color: transparent;
+    }
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 40px;
+    }
+    .hero-count {
+      font-size: 0.76rem;
+      color: var(--ink-60);
+      letter-spacing: 0.06em;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--ink);
+      color: var(--white);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 9px 18px;
+      border-radius: 999px;
+    }
+    .hero-r {
+      padding: 52px;
+      display: flex;
+      align-items: flex-end;
+    }
+    .hero-desc {
+      font-size: 1.08rem;
+      line-height: 1.82;
+      color: var(--ink-60);
+      max-width: 400px;
+    }
+    .hero-desc strong { color: var(--ink); font-weight: 700; }
+
+    /* ── FILTER ── */
+    .filter-row {
+      border-bottom: 2px solid var(--ink);
+      display: flex;
+      align-items: stretch;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .filter-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-30);
+      padding: 13px 22px;
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+    .f-btn {
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      padding: 13px 22px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-60);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.18s, color 0.18s;
+    }
+    .f-btn:hover         { background: var(--paper); color: var(--ink); }
+    .f-btn.active        { background: var(--ink);   color: var(--white); }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* ── CARD ── */
+    .card {
+      border-right: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .grid .card:nth-child(3n) { border-right: none; }
+    .card:not(.soon):hover    { background: var(--cream); }
+
+    /* カラーバー */
+    .c-bar { width: 100%; height: 5px; flex-shrink: 0; }
+
+    /* サムネイル */
+    .thumb {
+      height: 215px;
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .thumb iframe {
+      width: 210%;
+      height: 210%;
+      transform: scale(0.476);
+      transform-origin: top left;
+      pointer-events: none;
+      border: none;
+    }
+    /* プレースホルダー */
+    .thumb-ph {
+      width: 100%; height: 100%;
+      background: var(--paper);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px;
+    }
+    .thumb-ph-icon {
+      width: 48px; height: 48px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .thumb-ph-label {
+      font-size: 0.66rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-30);
+    }
+    /* ホバーオーバーレイ */
+    .thumb-overlay {
+      position: absolute; inset: 0;
+      background: var(--ink);
+      opacity: 0;
+      transition: opacity 0.22s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card:not(.soon):hover .thumb-overlay { opacity: 0.80; }
+    .preview-pill {
+      display: flex; align-items: center; gap: 9px;
+      color: var(--white);
+      font-size: 0.76rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      border: 1.5px solid rgba(255,255,255,0.38);
+      padding: 11px 22px;
+      border-radius: 3px;
+      transform: translateY(5px);
+      transition: transform 0.22s;
+    }
+    .card:not(.soon):hover .preview-pill { transform: translateY(0); }
+
+    /* カードボディ */
+    .card-body { padding: 22px 26px 26px; display: flex; flex-direction: column; flex: 1; }
+    .card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .tags       { display: flex; gap: 5px; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 3px;
+    }
+    .card-num { font-size: 0.66rem; font-weight: 700; color: var(--ink-30); }
+    .card-title {
+      font-size: 1.08rem; font-weight: 900;
+      letter-spacing: -0.02em; line-height: 1.3;
+      color: var(--ink); margin-bottom: 9px;
+    }
+    .card-desc { font-size: 0.80rem; color: var(--ink-60); line-height: 1.78; flex: 1; }
+    .card-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 18px; padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .card-date { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; color: var(--ink-30); text-transform: uppercase; }
+    .arrow-circle {
+      width: 26px; height: 26px;
+      border: 1.5px solid var(--ink);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.28s;
+    }
+    .card:not(.soon):hover .arrow-circle             { background: var(--ink); transform: rotate(45deg); }
+    .card:not(.soon):hover .arrow-circle svg         { stroke: var(--white); }
+
+    /* Coming soon カード */
+    .card.soon { cursor: default; opacity: 0.42; }
+    .card.soon:hover { background: var(--white); }
+    .card.soon .thumb-overlay { display: none; }
+
+    /* ── FOOTER BAR ── */
+    .foot-bar {
+      border-top: 2px solid var(--ink);
+      padding: 20px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .foot-l { font-size: 0.70rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-60); }
+    .foot-r { font-size: 0.68rem; color: var(--ink-30); }
+
+    /* ── MODAL ── */
+    .modal-bg {
+      position: fixed; inset: 0;
+      background: rgba(17,17,17,0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 900;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+    .modal-bg.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      width: 100%; max-width: 1120px; height: 88vh;
+      background: var(--cream);
+      border: 2px solid var(--ink);
+      border-radius: 4px;
+      box-shadow: 10px 10px 0 var(--ink);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transform: scale(0.95) translateY(14px);
+      transition: transform 0.38s cubic-bezier(0.16,1,0.3,1);
+    }
+    .modal-bg.open .modal-box { transform: scale(1) translateY(0); }
+    .modal-bar {
+      background: var(--cream);
+      border-bottom: 2px solid var(--ink);
+      padding: 11px 18px;
+      display: flex; align-items: center; gap: 14px;
+      flex-shrink: 0;
+    }
+    .mac-dots { display: flex; gap: 6px; }
+    .mac-dot  { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,0.1); }
+    .url-bar  {
+      flex: 1;
+      background: var(--paper);
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 13px;
+      font-size: 0.72rem; color: var(--ink-60);
+      font-family: 'Inter', monospace;
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+    }
+    .close-btn {
+      background: var(--ink); color: var(--white);
+      border: none; border-radius: 3px;
+      width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0;
+      transition: opacity 0.18s;
+    }
+    .close-btn:hover { opacity: 0.7; }
+    .modal-frame { flex: 1; overflow: hidden; }
+    .modal-frame iframe { width: 100%; height: 100%; border: none; }
+
+    /* ── MODAL TABS ── */
+    .modal-tabs {
+      display: flex; flex-shrink: 0;
+      border-left: 1px solid var(--border);
+      margin-left: 8px;
+    }
+    .modal-tab {
+      background: transparent; border: none;
+      border-right: 1px solid var(--border);
+      padding: 0 18px;
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-60); cursor: pointer; height: 100%;
+      transition: background 0.18s, color 0.18s;
+    }
+    .modal-tab:hover { background: var(--paper); color: var(--ink); }
+    .modal-tab.active { background: var(--ink); color: var(--white); }
+
+    /* ── PROCESS PANEL ── */
+    .modal-process {
+      flex: 1; overflow-y: auto;
+      padding: 36px 44px;
+      display: none;
+    }
+    .modal-process.show { display: block; }
+    .modal-frame.hide { display: none; }
+    .proc-section { margin-bottom: 30px; }
+    .proc-label {
+      font-size: 0.63rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-30); margin-bottom: 10px;
+    }
+    .proc-text {
+      font-size: 0.88rem; line-height: 1.85; color: var(--ink-60);
+    }
+    .proc-prompt {
+      background: var(--paper);
+      border-left: 3px solid var(--ink);
+      padding: 14px 18px;
+      border-radius: 0 4px 4px 0;
+      font-size: 0.82rem; line-height: 1.85;
+      color: var(--ink);
+    }
+    .proc-points { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .proc-point {
+      font-size: 0.82rem; color: var(--ink-60);
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .proc-point::before {
+      content: '—'; color: var(--ink-30);
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .proc-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+    .proc-chip {
+      font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 3px;
+      background: var(--paper); color: var(--ink-60);
+      border: 1px solid var(--border);
+    }
+
+    /* ── FOOTER (upgrade) ── */
+    .foot-bar {
+      border-top: 2px solid var(--ink);
+      padding: 0;
+    }
+    .foot-top-row {
+      display: flex; align-items: stretch;
+    }
+    .foot-brand {
+      padding: 20px 28px;
+      border-right: 1px solid var(--border);
+      font-size: 0.70rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-60);
+    }
+    .foot-sns {
+      display: flex; align-items: stretch;
+    }
+    .foot-sns-link {
+      display: flex; align-items: center;
+      padding: 0 20px;
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-60);
+      text-decoration: none;
+      border-right: 1px solid var(--border);
+      transition: background 0.18s, color 0.18s;
+    }
+    .foot-sns-link:hover { background: var(--paper); color: var(--ink); }
+    .foot-contact {
+      margin-left: auto;
+      display: flex; align-items: center;
+      padding: 0 24px;
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-left: 1px solid var(--border);
+      gap: 8px;
+      transition: background 0.18s;
+    }
+    .foot-contact:hover { background: var(--paper); }
+    .foot-bottom-row {
+      border-top: 1px solid var(--border);
+      padding: 12px 28px;
+      font-size: 0.64rem; color: var(--ink-30);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── CARD FOCUS ── */
+    .card:focus-visible {
+      outline: 2.5px solid var(--blue);
+      outline-offset: -2px;
+      z-index: 2;
+    }
+
+    /* ── REVEAL ANIMATION ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-l { border-right: none; border-bottom: 2px solid var(--ink); padding: 40px 24px; }
+      .hero-r { padding: 28px 24px 40px; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .grid .card:nth-child(3n)  { border-right: 2px solid var(--ink); }
+      .grid .card:nth-child(2n)  { border-right: none; }
+    }
+    @media (max-width: 520px) {
+      .grid { grid-template-columns: 1fr; }
+      .grid .card:nth-child(n) { border-right: none; }
+      .url-bar { display: none; }
+      .foot-bar { flex-direction: column; gap: 6px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- マーキーテープ -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Works</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Portfolio</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Mockup</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Design</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Prototype</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">UI &amp; UX</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Claude &times; You</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">LP</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Flyer</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Web Design</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Works</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Portfolio</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Mockup</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Design</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Prototype</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">UI &amp; UX</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Claude &times; You</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">LP</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Flyer</span><span class="marquee-sep">&#10022;</span>
+    <span class="marquee-item">Web Design</span><span class="marquee-sep">&#10022;</span>
+  </div>
+</div>
+
+<!-- ナビ -->
+<nav>
+  <a href="#" class="nav-brand">Portfolio</a>
+  <div class="nav-right">
+    <a href="#main-grid" class="nav-link">Works</a>
+    <a href="mailto:yumachie72198@gmail.com" class="nav-link">Contact</a>
+    <a href="#" class="nav-link">
+      <span class="status-dot"></span>2026
+    </a>
+  </div>
+</nav>
+
+<!-- ヒーロー -->
+<header class="hero reveal">
+  <div class="hero-l">
+    <div>
+      <p class="hero-eyebrow">Selected Works</p>
+      <h1 class="hero-title">
+        My<br><span class="outline">Works</span>
+      </h1>
+    </div>
+    <div class="hero-meta">
+      <span class="hero-count" id="hcount">— works</span>
+      <div class="badge">
+        <svg width="7" height="7" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="#34C759"/></svg>
+        Active
+      </div>
+    </div>
+  </div>
+  <div class="hero-r">
+    <p class="hero-desc">
+      Claude と一緒に作った<strong>モックアップ・成果物</strong>のポートフォリオ。<br><br>
+      カードをクリックすると<strong>その場でプレビュー</strong>できます。<br>
+      新しい成果物ができるたびに追加されます。
+    </p>
+  </div>
+</header>
+
+<!-- フィルター -->
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  <button class="f-btn active" data-f="all">All</button>
+  <button class="f-btn" data-f="lp">LP / Web</button>
+</div>
+
+<!-- グリッド -->
+<div class="grid" id="main-grid">
+
+  <!-- ── 01 博多駅前ルーム LP ── -->
+  <div class="card reveal" data-cat="lp" data-url="works/hakata-lp/index.html" data-title="博多駅前ルーム LP — preview">
+    <div class="c-bar" style="background:#FF6B9D;"></div>
+    <div class="thumb">
+      <iframe src="works/hakata-lp/index.html" loading="lazy" scrolling="no" title="博多駅前ルーム LP"></iframe>
+      <div class="thumb-overlay">
+        <div class="preview-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <div class="tags">
+          <span class="tag" style="background:#FFE4EF;color:#C4004A;">LP</span>
+          <span class="tag" style="background:#FFF0F5;color:#C4004A;">採用</span>
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">HTML</span>
+        </div>
+        <span class="card-num">01</span>
+      </div>
+      <p class="card-title">博多駅前ルーム LP</p>
+      <p class="card-desc">女性スタッフ採用LPのモックアップ。ピンク系カラーで親しみやすさを演出し、CTAへのスムーズな導線設計。</p>
+      <div class="card-foot">
+        <span class="card-date">Apr 2026</span>
+        <div class="arrow-circle">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 02 LogMind LP ── -->
+  <div class="card reveal" data-cat="lp" data-url="works/logmind-lp/index.html" data-title="LogMind LP — preview">
+    <div class="c-bar" style="background:#AF52DE;"></div>
+    <div class="thumb">
+      <iframe src="works/logmind-lp/index.html" loading="lazy" scrolling="no" title="LogMind LP"></iframe>
+      <div class="thumb-overlay">
+        <div class="preview-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <div class="tags">
+          <span class="tag" style="background:#EDE9FE;color:#6D28D9;">LP</span>
+          <span class="tag" style="background:#E0E7FF;color:#3730A3;">Dark UI</span>
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">HTML</span>
+        </div>
+        <span class="card-num">02</span>
+      </div>
+      <p class="card-title">LogMind LP</p>
+      <p class="card-desc">継続支援型ジャーナリングアプリのLPモックアップ。ダークモード・グラスモーフィズム・スクロールアニメーション実装。</p>
+      <div class="card-foot">
+        <span class="card-date">Apr 2026</span>
+        <div class="arrow-circle">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 03 もちもちタピオカ ── -->
+  <div class="card reveal" data-cat="lp" data-url="works/mochimochi-boba/index.html" data-title="MOCHIMOCHI BOBA — preview">
+    <div class="c-bar" style="background:#EF9F27;"></div>
+    <div class="thumb">
+      <iframe src="works/mochimochi-boba/index.html" loading="lazy" scrolling="no" title="MOCHIMOCHI BOBA"></iframe>
+      <div class="thumb-overlay">
+        <div class="preview-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <div class="tags">
+          <span class="tag" style="background:#FEF3C7;color:#92400E;">Web</span>
+          <span class="tag" style="background:#ECFDF5;color:#065F46;">飲食</span>
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">HTML</span>
+        </div>
+        <span class="card-num">03</span>
+      </div>
+      <p class="card-title">MOCHIMOCHI BOBA</p>
+      <p class="card-desc">下北沢のタピオカ専門店サイトモックアップ。ポップなカラーリングとメニュー紹介・カスタマイズUI。</p>
+      <div class="card-foot">
+        <span class="card-date">Apr 2026</span>
+        <div class="arrow-circle">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 04 アクアレジデンス ── -->
+  <div class="card reveal" data-cat="lp" data-url="works/arque-residence/index.html" data-title="ARQUE RESIDENCE — preview">
+    <div class="c-bar" style="background:#B8942A;"></div>
+    <div class="thumb">
+      <iframe src="works/arque-residence/index.html" loading="lazy" scrolling="no" title="ARQUE RESIDENCE"></iframe>
+      <div class="thumb-overlay">
+        <div class="preview-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <div class="tags">
+          <span class="tag" style="background:#FEF3C7;color:#92400E;">LP</span>
+          <span class="tag" style="background:#E0E7FF;color:#1E3A8A;">不動産</span>
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">HTML</span>
+        </div>
+        <span class="card-num">04</span>
+      </div>
+      <p class="card-title">ARQUE RESIDENCE</p>
+      <p class="card-desc">麻布台の高級マンション紹介サイト。ネイビー×ゴールドの上質なカラーリングで高級感を演出。</p>
+      <div class="card-foot">
+        <span class="card-date">Apr 2026</span>
+        <div class="arrow-circle">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 05 クリエイター展 ── -->
+  <div class="card reveal" data-cat="lp" data-url="works/creator-exhibition/index.html" data-title="杜の都のクリエイター展 2026 — preview">
+    <div class="c-bar" style="background:#8A9A8A;"></div>
+    <div class="thumb">
+      <iframe src="works/creator-exhibition/index.html" loading="lazy" scrolling="no" title="クリエイター展 2026"></iframe>
+      <div class="thumb-overlay">
+        <div class="preview-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <div class="tags">
+          <span class="tag" style="background:#F5F0E8;color:#6B5A3A;">Web</span>
+          <span class="tag" style="background:#E8F0E8;color:#2D5A2D;">イベント</span>
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">HTML</span>
+        </div>
+        <span class="card-num">05</span>
+      </div>
+      <p class="card-title">杜の都のクリエイター展 2026</p>
+      <p class="card-desc">仙台で開催されるクリエイター展のイベントサイト。和紙テクスチャ×モダンレイアウトで文化的な雰囲気を表現。</p>
+      <div class="card-foot">
+        <span class="card-date">Apr 2026</span>
+        <div class="arrow-circle">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 06 テノヒラ ── -->
+  <div class="card reveal" data-cat="lp" data-url="works/tenohira-lp/index.html" data-title="テノヒラ LP — preview">
+    <div class="c-bar" style="background:#34C7A0;"></div>
+    <div class="thumb">
+      <iframe src="works/tenohira-lp/index.html" loading="lazy" scrolling="no" title="テノヒラ LP"></iframe>
+      <div class="thumb-overlay">
+        <div class="preview-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <div class="tags">
+          <span class="tag" style="background:#CCFBF1;color:#065F46;">LP</span>
+          <span class="tag" style="background:#E0F2FE;color:#075985;">子育て</span>
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">HTML</span>
+        </div>
+        <span class="card-num">06</span>
+      </div>
+      <p class="card-title">テノヒラ</p>
+      <p class="card-desc">有資格者100%の教育シッターサービスLP。安心感と温かみを両立した清潔感あるデザイン。</p>
+      <div class="card-foot">
+        <span class="card-date">Apr 2026</span>
+        <div class="arrow-circle">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 07 MIELLE ファッションLP ── -->
+  <div class="card reveal" data-cat="lp" data-url="works/mielle-fashion/index.html" data-title="MIELLE — Fashion LP preview">
+    <div class="c-bar" style="background:#DDD5F0;"></div>
+    <div class="thumb">
+      <iframe src="works/mielle-fashion/index.html" loading="lazy" scrolling="no" title="MIELLE Fashion LP"></iframe>
+      <div class="thumb-overlay">
+        <div class="preview-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <div class="tags">
+          <span class="tag" style="background:#F2D9D9;color:#7A3030;">Fashion</span>
+          <span class="tag" style="background:#DDD5F0;color:#4A3580;">Pastel</span>
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">HTML</span>
+        </div>
+        <span class="card-num">07</span>
+      </div>
+      <p class="card-title">MIELLE — Fashion LP</p>
+      <p class="card-desc">パステルカラーのスローファッションブランドLP。コルモラントフォント×やわらかグラデーションで上質なエディトリアルデザイン。</p>
+      <div class="card-foot">
+        <span class="card-date">Apr 2026</span>
+        <div class="arrow-circle">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 08 PROJECT: ALTER ── -->
+  <div class="card reveal" data-cat="lp" data-url="works/project-alter/index.html" data-title="PROJECT: ALTER — preview">
+    <div class="c-bar" style="background:#6B1220;"></div>
+    <div class="thumb">
+      <iframe src="works/project-alter/index.html" loading="lazy" scrolling="no" title="PROJECT: ALTER"></iframe>
+      <div class="thumb-overlay">
+        <div class="preview-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <div class="tags">
+          <span class="tag" style="background:#2D0A10;color:#C94060;">Game</span>
+          <span class="tag" style="background:#1A1A2E;color:#8888CC;">Dark UI</span>
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">HTML</span>
+        </div>
+        <span class="card-num">08</span>
+      </div>
+      <p class="card-title">PROJECT: ALTER</p>
+      <p class="card-desc">「その偽物(リアル)を、引き剥がせ。」ブラック×ワインレッドの重厚なゲームLPモックアップ。謎めいたコンセプトとシネマティックな演出。</p>
+      <div class="card-foot">
+        <span class="card-date">Apr 2026</span>
+        <div class="arrow-circle">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /grid -->
+
+<!-- フッターバー -->
+<div class="foot-bar">
+  <div class="foot-top-row">
+    <span class="foot-brand">Made with Claude</span>
+    <div class="foot-sns">
+      <a href="https://note.com/" target="_blank" rel="noopener" class="foot-sns-link">Note</a>
+      <a href="https://x.com/" target="_blank" rel="noopener" class="foot-sns-link">X (Twitter)</a>
+      <a href="https://instagram.com/" target="_blank" rel="noopener" class="foot-sns-link">Instagram</a>
+    </div>
+    <a href="mailto:yumachie72198@gmail.com" class="foot-contact">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+      Contact
+    </a>
+  </div>
+  <div class="foot-bottom-row">&copy; 2026 &mdash; 新しい成果物ができたらカードが増えていきます</div>
+</div>
+
+<!-- モーダル -->
+<div class="modal-bg" id="mbg">
+  <div class="modal-box">
+    <div class="modal-bar">
+      <div class="mac-dots">
+        <div class="mac-dot" style="background:#FF5F57;"></div>
+        <div class="mac-dot" style="background:#FEBC2E;"></div>
+        <div class="mac-dot" style="background:#28C840;"></div>
+      </div>
+      <div class="modal-tabs">
+        <button class="modal-tab active" id="tab-preview" aria-label="プレビューを表示">Preview</button>
+        <button class="modal-tab" id="tab-process" aria-label="制作プロセスを表示">Process</button>
+      </div>
+      <div class="url-bar" id="urlbar">&mdash;</div>
+      <button class="close-btn" id="cbtn" aria-label="閉じる">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-frame" id="mframe-wrap">
+      <iframe id="mframe" src="" title="preview" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+    </div>
+    <div class="modal-process" id="mprocess" role="region" aria-label="制作プロセス"></div>
+  </div>
+</div>
+
+<script>
+  /* ── 制作プロセスデータ ── */
+  const PROCESS = {
+    'works/hakata-lp/index.html': {
+      concept: '女性スタッフ採用を目的としたLP。ターゲットを「副業・在宅を希望する20〜30代女性」に設定し、「とにかくLINE登録のハードルを下げる」というゴールを軸にデザインを構築しました。',
+      prompt: '「博多駅前に新規オープンする女性スタッフ向け採用LPを作ってください。主婦・副業希望の方が安心して登録できるよう、ピンク系の温かみある配色でLINE登録への導線を最小化した構成にしてください。」',
+      points: ['ピンク系配色で親しみやすさ・安心感を演出', 'CTAをLINE登録の1点に絞りノイズを排除', 'スマートフォンファーストの縦長レイアウト', '不安を先回りして解消するFAQセクションを配置'],
+      tools: ['HTML', 'CSS Animation', 'Flexbox'],
+    },
+    'works/logmind-lp/index.html': {
+      concept: 'ジャーナリングアプリ「LogMind」のLP。深夜に書く習慣をコンセプトにしたアプリのため、「静謐さ」「没入感」「知的なデザイン」の3軸でUI設計を行いました。',
+      prompt: '「継続支援型のジャーナリングアプリLPを作ってください。ダークモード・グラスモーフィズムを使い、深夜でも目に優しい落ち着いた配色で。スクロールアニメーションでアプリの体験を先取りして感じてもらえる演出を入れてください。」',
+      points: ['ダーク×パープルで「夜」の書く時間を表現', 'グラスモーフィズムで浮遊感・高級感を演出', 'スクロールアニメーションでUXへの期待を高める', 'CTA前に機能紹介セクションを挟み納得感を醸成'],
+      tools: ['HTML', 'CSS Glassmorphism', 'Scroll Animation'],
+    },
+    'works/mochimochi-boba/index.html': {
+      concept: '下北沢の個性派タピオカ専門店のWebサイト。店舗の「カスタマイズ体験が楽しい」という強みをビジュアルで体験させることをテーマに設計しました。',
+      prompt: '「下北沢の個性的なタピオカ専門店サイトを作ってください。ポップで食欲をそそるカラーリングで、フレーバーごとに色が変わるメニュー表示と、トッピングのカスタマイズUIを入れてください。SNS映えも意識した賑やかなデザインで。」',
+      points: ['フレーバーごとに異なるアクセントカラーを設定', 'カスタマイズUIをインタラクティブに実装', 'ポップ体×丸ゴシックでカジュアルな雰囲気を演出', 'Instagramへの導線をフッターに設置'],
+      tools: ['HTML', 'CSS Grid', 'JavaScript UI'],
+    },
+    'works/arque-residence/index.html': {
+      concept: '麻布台の高級マンション「ARQUE RESIDENCE」の紹介サイト。購入対象者の資産感覚に合った「上質さ」を、色・余白・フォント選定で表現することに集中しました。',
+      prompt: '「麻布台に建つ超高級マンションの紹介LPを作ってください。ネイビーとゴールドを軸に、余白を大きく取った贅沢なレイアウトで資産価値の高さを表現してください。問い合わせへの導線は1箇所に絞り、上品さを壊さないようにしてください。」',
+      points: ['ネイビー×ゴールドで「品格」を色で表現', '大きな余白で高級感・非日常感を演出', 'コルモラント体セリフフォントで知性と優雅さを強調', '問い合わせCTAはフォームではなく電話1択に絞る'],
+      tools: ['HTML', 'CSS Custom Properties', 'Cormorant Garamond Font'],
+    },
+    'works/creator-exhibition/index.html': {
+      concept: '仙台で開催される「杜の都のクリエイター展 2026」のイベントサイト。東北の文化・自然をベースに、現代的なタイポグラフィと和紙テクスチャを組み合わせる実験的なアプローチを取りました。',
+      prompt: '「仙台で開催されるクリエイター展のイベントサイトを作ってください。和紙テクスチャやアースカラーを使いつつ、現代的なグリッドレイアウトで出展者情報を整理してください。東北の文化的な空気感を残しながら、デジタルネイティブにも刺さるデザインにしてください。」',
+      points: ['和紙テクスチャ×モダングリッドで文化と現代の融合', 'アースカラー（セージ・ゴールド）で東北の自然を表現', '出展者カードを統一フォーマットで整理', 'タイポグラフィ主導のビジュアルで差別化'],
+      tools: ['HTML', 'CSS Texture', 'Noto Serif JP'],
+    },
+    'works/tenohira-lp/index.html': {
+      concept: '有資格者100%の教育シッターサービス「テノヒラ」のLP。保護者の「子どもを預けることへの不安」を丁寧に解消しながら、温かみのある信頼感を作ることを最優先に設計しました。',
+      prompt: '「有資格者100%の教育シッターサービスのLPを作ってください。保護者の不安を払拭できるよう、資格・実績・口コミを前面に出しつつ、温かくクリーンな配色で安心感を演出してください。料金・サービス説明はシンプルにまとめてください。」',
+      points: ['ティール系のクリーンな配色で清潔感と信頼感を両立', '「有資格者100%」という数字を最初のビジュアルで訴求', '保護者の声（口コミ）セクションで社会的証明を追加', '料金・申し込みフローをステップ図で可視化'],
+      tools: ['HTML', 'CSS', 'Hiragino Font Stack'],
+    },
+    'works/mielle-fashion/index.html': {
+      concept: 'スローファッションブランド「MIELLE」のコレクションLP。既存のモックアップにはないジャンルとして、パステルカラー×エディトリアルなアプローチで挑戦しました。ルックブックとEC機能の共存がテーマです。',
+      prompt: '「パステルカラーのスローファッションブランドのLPを作ってください。コルモラント体を使ったエディトリアルなデザインで、コレクション一覧・ルックブック・カラーパレット紹介を1ページに美しく収めてください。ドラッグで横スクロールできるルックブックセクションも入れてください。」',
+      points: ['コルモラント体でエレガントなエディトリアル感を演出', 'パステル6色のグラデーションブロックで商品を表現', 'ドラッグスクロール対応のルックブックUIを実装', 'カラースウォッチパレットでシーズンカラーを視覚化'],
+      tools: ['HTML', 'CSS Gradient', 'Cormorant Garamond', 'Drag Scroll JS'],
+    },
+    'works/project-alter/index.html': {
+      concept: 'ゲームタイトル「PROJECT: ALTER」のLPモックアップ。「偽物と本物」をテーマにした謎多きタイトルのため、重厚感・緊張感・謎めいた雰囲気を全面に出す設計にしました。既存7作品とは完全に異なるダーク×シネマティックの世界観に挑戦しています。',
+      prompt: '「「その偽物(リアル)を、引き剥がせ。」というキャッチコピーのゲームLPを作ってください。ブラックとワインレッドを基調に、謎と緊張感が漂うシネマティックなデザインで。コンセプトストーリー・ゲームシステム・ギャラリー・価格プランのセクション構成にしてください。」',
+      points: ['ブラック×ワインレッドで「謎と危険」を色で表現', 'ヴィネット効果・グリッチ演出でゲーム的な没入感を演出', 'コンセプト・システム・ギャラリーを順に開示する構成でストーリー感を醸成', 'Josefin Sans × Cormorant Garamond の組み合わせで洗練されたダーク感を表現'],
+      tools: ['HTML', 'CSS Vignette', 'Josefin Sans', 'Cormorant Garamond'],
+    },
+  };
+
+  /* ── reveal ── */
+  const obs = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.07) + 's';
+    obs.observe(el);
+  });
+
+  /* ── count ── */
+  const live = document.querySelectorAll('.card:not(.soon)');
+  document.getElementById('hcount').textContent = live.length + ' work' + (live.length !== 1 ? 's' : '');
+
+  /* ── アクセシビリティ: カードにrole・tabindex付与 ── */
+  live.forEach(c => {
+    c.setAttribute('role', 'button');
+    c.setAttribute('tabindex', '0');
+    c.setAttribute('aria-label', (c.querySelector('.card-title')?.textContent || 'Work') + ' — プレビューを開く');
+  });
+
+  /* ── filter ── */
+  document.querySelectorAll('.f-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.f-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      const f = b.dataset.f;
+      document.querySelectorAll('.card').forEach(c => {
+        c.style.display = (f === 'all' || c.dataset.cat === f) ? '' : 'none';
+      });
+    });
+  });
+
+  /* ── modal ── */
+  const mbg       = document.getElementById('mbg');
+  const mframe    = document.getElementById('mframe');
+  const mframeWrap= document.getElementById('mframe-wrap');
+  const mprocess  = document.getElementById('mprocess');
+  const urlbar    = document.getElementById('urlbar');
+  const tabPrev   = document.getElementById('tab-preview');
+  const tabProc   = document.getElementById('tab-process');
+
+  function renderProcess(url) {
+    const d = PROCESS[url];
+    if (!d) { mprocess.innerHTML = '<p style="color:var(--ink-60);padding:24px;">制作メモは準備中です。</p>'; return; }
+    mprocess.innerHTML = `
+      <div class="proc-section">
+        <p class="proc-label">Concept</p>
+        <p class="proc-text">${d.concept}</p>
+      </div>
+      <div class="proc-section">
+        <p class="proc-label">Prompt（指示文の要約）</p>
+        <div class="proc-prompt">${d.prompt}</div>
+      </div>
+      <div class="proc-section">
+        <p class="proc-label">Design Points</p>
+        <div class="proc-points">${d.points.map(p => `<span class="proc-point">${p}</span>`).join('')}</div>
+      </div>
+      <div class="proc-section">
+        <p class="proc-label">Tools / Technologies</p>
+        <div class="proc-chips">${d.tools.map(t => `<span class="proc-chip">${t}</span>`).join('')}</div>
+      </div>`;
+  }
+
+  function switchTab(tab) {
+    if (tab === 'preview') {
+      tabPrev.classList.add('active');
+      tabProc.classList.remove('active');
+      mframeWrap.classList.remove('hide');
+      mprocess.classList.remove('show');
+    } else {
+      tabProc.classList.add('active');
+      tabPrev.classList.remove('active');
+      mframeWrap.classList.add('hide');
+      mprocess.classList.add('show');
+    }
+  }
+
+  function openM(url, title) {
+    mframe.src = url;
+    urlbar.textContent = title || url;
+    renderProcess(url);
+    switchTab('preview');
+    mbg.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeM() {
+    mbg.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => { mframe.src = ''; }, 350);
+  }
+
+  tabPrev.addEventListener('click', () => switchTab('preview'));
+  tabProc.addEventListener('click', () => switchTab('process'));
+
+  /* クリック & キーボード操作 */
+  live.forEach(c => {
+    const open = () => openM(c.dataset.url, c.dataset.title);
+    c.addEventListener('click', open);
+    c.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    });
+  });
+
+  document.getElementById('cbtn').addEventListener('click', closeM);
+  mbg.addEventListener('click', e => { if (e.target === mbg) closeM(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeM(); });
+</script>
+</body>
+</html>

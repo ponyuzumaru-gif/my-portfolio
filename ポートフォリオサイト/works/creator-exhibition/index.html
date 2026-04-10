@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>杜の都のクリエイター展 2026 — Design Direction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400&family=Noto+Sans+JP:wght@100;300;400&family=Inter:wght@100;200;300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paper:    #F4F0EA;
+    --ink:      #1A1817;
+    --muted:    #8A847C;
+    --pale:     #E8E3DA;
+    --gold:     #B89A6E;
+    --sage:     #8A9A8A;
+    --cream:    #FAF7F2;
+  }
+
+  html { font-size: 16px; background: #EDEBE6; }
+
+  body {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    color: var(--ink);
+    line-height: 1.7;
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ─── HEADER SECTION ─── */
+  .doc-header {
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 40px;
+    margin-bottom: 70px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .doc-header .label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .doc-header h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 200;
+    font-size: clamp(22px, 3vw, 34px);
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .doc-header .meta {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .doc-header .meta p {
+    font-size: 10px;
+    font-weight: 200;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  /* ─── SECTION WRAPPER ─── */
+  .section {
+    margin-bottom: 80px;
+  }
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .section-label .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+  }
+  .section-label .title {
+    font-weight: 200;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--pale);
+  }
+
+  /* ─── CONCEPT BLOCK ─── */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 40px;
+  }
+  .concept-card {
+    background: var(--cream);
+    padding: 36px 28px;
+    position: relative;
+  }
+  .concept-card .kw {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  .concept-card h3 {
+    font-weight: 300;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .concept-card p {
+    font-size: 12px;
+    font-weight: 200;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  .concept-statement {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 48px 56px;
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 200;
+    font-size: 15px;
+    line-height: 2.4;
+    letter-spacing: 0.1em;
+  }
+  .concept-statement em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  /* ─── GRID LAYOUT DIAGRAM ─── */
+  .layout-diagram {
+    background: var(--cream);
+    padding: 48px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 48px;
+    align-items: start;
+  }
+  .flyer-wireframe {
+    background: white;
+    aspect-ratio: 3/4;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+  }
+  .fw-image {
+    flex: 1 0 52%;
+    background: #D4CFC9;
+    position: relative;
+    overflow: hidden;
+  }
+  .fw-image::after {
+    content: 'MAIN VISUAL\A作品写真 × 余白 7:3';
+    white-space: pre;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 200;
+    letter-spacing: 0.2em;
+    color: #9A948E;
+    text-align: center;
+    line-height: 2;
+  }
+  .fw-stripe {
+    height: 2px;
+    background: var(--gold);
+  }
+  .fw-body {
+    padding: 24px 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .fw-catch {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 200;
+    font-size: 8px;
+    color: #9A948E;
+    letter-spacing: 0.12em;
+    line-height: 1.9;
+  }
+  .fw-title {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .fw-title span {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    margin-bottom: 4px;
+  }
+  .fw-date {
+    margin-top: 4px;
+    border-top: 1px solid #E0DBD4;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .fw-date-text {
+    font-size: 7px;
+    font-weight: 200;
+    color: var(--muted);
+    line-height: 2;
+    letter-spacing: 0.15em;
+  }
+  .fw-qr {
+    width: 28px;
+    height: 28px;
+    background: var(--ink);
+    border-radius: 1px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 2px;
+    padding: 3px;
+  }
+  .fw-qr::before, .fw-qr::after {
+    content: '';
+    grid-column: 1;
+    grid-row: 1;
+    background: var(--paper);
+  }
+  .fw-footer {
+    background: var(--ink);
+    padding: 7px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .fw-footer span {
+    font-size: 7px;
+    font-weight: 200;
+    color: rgba(244,240,234,0.5);
+    letter-spacing: 0.2em;
+  }
+  .fw-free {
+    font-size: 7px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    font-weight: 300;
+  }
+
+  .layout-notes {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .note-item {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--pale);
+  }
+  .note-item:last-child { border-bottom: none; }
+  .note-item .note-tag {
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .note-item h4 {
+    font-size: 13px;
+    font-weight: 300;
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  .note-item p {
+    font-size: 12px;
+    font-weight: 200;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+  .note-item code {
+    display: inline-block;
+    font-family: 'Inter', monospace;
+    font-size: 10px;
+    background: var(--pale);
+    padding: 2px 8px;
+    border-radius: 2px;
+    color: var(--ink);
+    margin-top: 6px;
+  }
+
+  /* ─── COLOR PALETTE ─── */
+  .palette-row {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 32px;
+  }
+  .swatch {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .swatch-color {
+    height: 100px;
+    border-radius: 1px;
+  }
+  .swatch-info {
+    padding: 14px 0 0;
+  }
+  .swatch-info .sw-name {
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .swatch-info .sw-hex {
+    font-family: 'Inter', monospace;
+    font-size: 10px;
+    font-weight: 200;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .swatch-info .sw-use {
+    font-size: 10px;
+    font-weight: 200;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.7;
+  }
+
+  .paper-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+  }
+  .paper-card {
+    background: var(--cream);
+    padding: 28px;
+  }
+  .paper-card .paper-label {
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .paper-card h4 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 8px;
+    letter-spacing: 0.08em;
+  }
+  .paper-card p {
+    font-size: 11px;
+    font-weight: 200;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  /* ─── VISUAL DIRECTION ─── */
+  .visual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 24px;
+  }
+  .vd-card {
+    background: var(--cream);
+    padding: 36px 32px;
+  }
+  .vd-card .vd-icon {
+    width: 36px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 20px;
+  }
+  .vd-card h4 {
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .vd-card p {
+    font-size: 12px;
+    font-weight: 200;
+    color: var(--muted);
+    line-height: 2;
+  }
+  .vd-card .spec {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── SNS SECTION ─── */
+  .sns-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .sns-card {
+    background: var(--cream);
+    padding: 40px 36px;
+  }
+  .sns-card.dark {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .sns-card .sns-label {
+    font-size: 9px;
+    font-weight: 200;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .sns-card h4 {
+    font-size: 16px;
+    font-weight: 200;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    font-family: 'Noto Serif JP', serif;
+  }
+  .sns-card p {
+    font-size: 12px;
+    font-weight: 200;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+  .sns-card.dark p { color: rgba(244,240,234,0.55); }
+
+  .qr-demo {
+    width: 64px;
+    height: 64px;
+    background: var(--paper);
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-rows: repeat(7,1fr);
+    gap: 1.5px;
+    padding: 6px;
+  }
+  .qr-demo span {
+    background: var(--ink);
+    border-radius: 0.5px;
+  }
+
+  /* ─── FINAL FLYER ─── */
+  .final-section {
+    margin-top: 100px;
+    padding-top: 60px;
+    border-top: 1px solid var(--gold);
+  }
+  .final-label {
+    font-size: 10px;
+    font-weight: 200;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 48px;
+    text-align: center;
+  }
+
+  .flyer-full {
+    max-width: 500px;
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 20px 80px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Noise texture overlay */
+  .flyer-full::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 10;
+    mix-blend-mode: multiply;
+  }
+
+  .flyer-image-zone {
+    width: 100%;
+    aspect-ratio: 4/3;
+    position: relative;
+    overflow: hidden;
+  }
+  .flyer-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+  .flyer-image-zone::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, var(--paper) 100%);
+  }
+
+  /* Abstract art shape in image zone */
+  .art-shape {
+    position: absolute;
+    border-radius: 50%;
+  }
+  .as1 {
+    width: 55%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle, rgba(184,154,110,0.35) 0%, transparent 70%);
+    top: 10%;
+    left: 5%;
+  }
+  .as2 {
+    width: 35%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle, rgba(138,154,138,0.3) 0%, transparent 70%);
+    top: 30%;
+    right: 10%;
+  }
+  .as3 {
+    width: 20%;
+    aspect-ratio: 1;
+    background: rgba(26,24,23,0.08);
+    bottom: 20%;
+    left: 40%;
+    border-radius: 0;
+    transform: rotate(15deg);
+  }
+
+  .flyer-top-bar {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 32px;
+    z-index: 5;
+  }
+  .flyer-top-bar span {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: rgba(26,24,23,0.45);
+    text-transform: uppercase;
+  }
+
+  .flyer-content {
+    padding: 0 40px 40px;
+  }
+
+  .flyer-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-top: 8px;
+  }
+  .flyer-meta .line {
+    width: 28px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .flyer-meta span {
+    font-size: 9px;
+    font-weight: 200;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .flyer-catch {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 200;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    line-height: 2.2;
+    margin-bottom: 18px;
+  }
+
+  .flyer-title-main {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    font-size: 24px;
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .flyer-title-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    margin-bottom: 32px;
+    text-transform: uppercase;
+  }
+
+  .flyer-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin-bottom: 24px;
+  }
+
+  .flyer-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+  .flyer-info-item .info-label {
+    font-size: 8px;
+    font-weight: 200;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .flyer-info-item .info-value {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--ink);
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+  }
+
+  .flyer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 16px;
+    border-top: 1px solid rgba(184,154,110,0.25);
+  }
+  .flyer-sns {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .flyer-sns .sns-handle {
+    font-size: 9px;
+    font-weight: 200;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .flyer-sns .sns-note {
+    font-size: 8px;
+    font-weight: 200;
+    letter-spacing: 0.1em;
+    color: rgba(138,132,124,0.6);
+  }
+  .flyer-free-badge {
+    text-align: right;
+  }
+  .flyer-free-badge .free-ja {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 9px;
+    font-weight: 200;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    display: block;
+    margin-bottom: 1px;
+  }
+  .flyer-free-badge .free-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--ink);
+    letter-spacing: 0.15em;
+  }
+
+  /* QR block inside flyer */
+  .flyer-qr-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+  .flyer-qr {
+    width: 48px;
+    height: 48px;
+    background: var(--ink);
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap: 1px;
+  }
+  .flyer-qr .q { background: var(--paper); }
+  .flyer-qr .b { background: var(--ink); }
+
+  .flyer-footer {
+    background: var(--ink);
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .flyer-footer span {
+    font-size: 8px;
+    font-weight: 200;
+    letter-spacing: 0.25em;
+    color: rgba(244,240,234,0.35);
+  }
+  .flyer-footer .footer-accent {
+    color: rgba(184,154,110,0.6);
+  }
+
+  /* ─── TYPOGRAPHY SPEC ─── */
+  .typo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .typo-table th {
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--pale);
+    background: var(--cream);
+  }
+  .typo-table td {
+    padding: 16px 16px;
+    border-bottom: 1px solid var(--pale);
+    vertical-align: top;
+    font-weight: 200;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .typo-table td:first-child { color: var(--ink); font-weight: 300; }
+  .typo-table tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<!-- ====== DOCUMENT HEADER ====== -->
+<header class="doc-header">
+  <div>
+    <p class="label">Art Direction Document</p>
+    <h1>杜の都のクリエイター展 2026<br>チラシ デザインディレクション</h1>
+  </div>
+  <div class="meta">
+    <p>2026.04</p>
+    <p>Confidential</p>
+    <p>Rev. 1.0</p>
+  </div>
+</header>
+
+
+<!-- ====== 1. DESIGN CONCEPT ====== -->
+<section class="section">
+  <div class="section-label">
+    <span class="num">01</span>
+    <span class="title">Design Concept</span>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <span class="kw">Whispered Craft</span>
+      <h3>囁くような存在感</h3>
+      <p>主張しすぎない。けれど、手に取ったとき確かな「引力」を持つ。チラシ自体が一枚のアート作品として成立するレベルの質感を目指す。</p>
+    </div>
+    <div class="concept-card">
+      <span class="kw">Urban Stillness</span>
+      <h3>都市の静けさ</h3>
+      <p>仙台・杜の都の持つ「緑と静謐」。喧騒の中にある余白。そのコントラストをレイアウトの息づかいとして翻訳する。</p>
+    </div>
+    <div class="concept-card">
+      <span class="kw">Material Poetry</span>
+      <h3>素材の詩学</h3>
+      <p>紙の質感、インクの発色、印刷の荒さ——アナログの文脈をデジタル時代に再定義。2026年のクラフトシーンを体現するための「意図ある不完全さ」。</p>
+    </div>
+  </div>
+
+  <div class="concept-statement">
+    情報を<em>削ぎ落とした先</em>にある美しさ。<br>
+    この一枚を手にした人が、「行ってみたい」より先に「<em>飾っておきたい</em>」と感じる——<br>
+    そのレベルの視覚体験を、A4一枚に封じ込める。
+  </div>
+</section>
+
+
+<!-- ====== 2. GRID LAYOUT ====== -->
+<section class="section">
+  <div class="section-label">
+    <span class="num">02</span>
+    <span class="title">Grid System & Layout Direction</span>
+  </div>
+
+  <div class="layout-diagram">
+    <!-- Wireframe -->
+    <div class="flyer-wireframe">
+      <div class="fw-image"></div>
+      <div class="fw-stripe"></div>
+      <div class="fw-body">
+        <div class="fw-catch">日常を彩る、世界にひとつだけの作品に出会う。</div>
+        <div class="fw-title">
+          <span>MORI NO MIYAKO CREATOR EXHIBITION</span>
+          杜の都の<br>クリエイター展 2026
+        </div>
+        <div class="fw-date">
+          <div class="fw-date-text">
+            2026.08.21 FRI — 08.30 SUN<br>
+            10:00—19:00（最終日 —17:00）<br>
+            仙台メディアテーク 1F
+          </div>
+          <div class="fw-qr"></div>
+        </div>
+      </div>
+      <div class="fw-footer">
+        <span>@mori_creator_ex</span>
+        <span class="fw-free">FREE ADMISSION</span>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="layout-notes">
+      <div class="note-item">
+        <div class="note-tag">Zone A / 52%</div>
+        <h4>メインビジュアルゾーン</h4>
+        <p>縦の黄金比（上52%）を画像エリアに充当。写真は常に<strong style="font-weight:400">被写体：余白 = 6:4</strong>の構成で、作品が「浮いている」感覚を演出する。画像は紙面の端まで全てブリードで出血。</p>
+      </div>
+      <div class="note-item">
+        <div class="note-tag">Zone B / Text Anchor</div>
+        <h4>タイポグラフィゾーン</h4>
+        <p>左マージン 10mm固定。テキスト要素は全て左揃えで「重力」を持たせる。キャッチコピーは本文の6割サイズ・薄いウェイトで、タイトルへの視線誘導を担う。</p>
+        <code>Left margin: 10mm / Baseline grid: 4pt</code>
+      </div>
+      <div class="note-item">
+        <div class="note-tag">Zone C / Footer</div>
+        <h4>情報バー（最下部）</h4>
+        <p>ダークバーを用いてSNSハンドルと入場無料を配置。メインの余白との対比でQRコードが「呼吸口」として機能する。</p>
+      </div>
+      <div class="note-item">
+        <div class="note-tag">Accent Line</div>
+        <h4>ゴールドセパレーター</h4>
+        <p>画像とテキストの境界に2pxのゴールドラインを一本。印刷では金インク指定推奨。展覧会の「格」を一本の線が担う。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Typography Table -->
+  <div style="margin-top: 2px;">
+    <table class="typo-table">
+      <thead>
+        <tr>
+          <th>要素</th>
+          <th>フォント / ウェイト</th>
+          <th>サイズ</th>
+          <th>役割</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>イベント名（和）</td>
+          <td>Noto Serif JP / W300</td>
+          <td>26pt / L.H. 1.5</td>
+          <td>ヒエラルキーの頂点。明朝の繊細さで「工芸感」を付与</td>
+        </tr>
+        <tr>
+          <td>イベント名（欧文）</td>
+          <td>Cormorant Garamond / W300</td>
+          <td>9pt / Tracking +350</td>
+          <td>タイトルの上部にゴールドで配置。エレガンスのアクセント</td>
+        </tr>
+        <tr>
+          <td>キャッチコピー</td>
+          <td>Noto Serif JP / W200</td>
+          <td>11pt / L.H. 2.2</td>
+          <td>薄いウェイトで「空気のように」浮かせる</td>
+        </tr>
+        <tr>
+          <td>日時・場所</td>
+          <td>Noto Sans JP / W100</td>
+          <td>8.5pt / L.H. 1.8</td>
+          <td>情報は最小化。視線が自然に流れ着く「終着点」として機能</td>
+        </tr>
+        <tr>
+          <td>SNS・英字情報</td>
+          <td>Inter / W200</td>
+          <td>8pt / Tracking +200</td>
+          <td>デジタルへの橋渡し。モノスペース感で技術的清潔感を演出</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- ====== 3. COLOR PALETTE ====== -->
+<section class="section">
+  <div class="section-label">
+    <span class="num">03</span>
+    <span class="title">Color Palette & Material</span>
+  </div>
+
+  <div class="palette-row">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#F4F0EA;border:1px solid #E0DBD4;"></div>
+      <div class="swatch-info">
+        <div class="sw-name">Paper White</div>
+        <div class="sw-hex">#F4F0EA</div>
+        <div class="sw-use">ベース。温かみのあるオフホワイト。純白ではなく「時間の蓄積」を感じる色</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#1A1817;"></div>
+      <div class="swatch-info">
+        <div class="sw-name">Deep Ink</div>
+        <div class="sw-hex">#1A1817</div>
+        <div class="sw-use">テキスト・フッターバー。純黒より柔らかく、インク本来の温度を持つ</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#B89A6E;"></div>
+      <div class="swatch-info">
+        <div class="sw-name">Aged Gold</div>
+        <div class="sw-hex">#B89A6E</div>
+        <div class="sw-use">セパレーター・アクセント文字。新品の金ではなく「使われてきた真鍮」の色</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#8A847C;"></div>
+      <div class="swatch-info">
+        <div class="sw-name">Stone Grey</div>
+        <div class="sw-hex">#8A847C</div>
+        <div class="sw-use">サブテキスト。情報の優先度を下げるための「沈黙の色」</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#8A9A8A;"></div>
+      <div class="swatch-info">
+        <div class="sw-name">Forest Sage</div>
+        <div class="sw-hex">#8A9A8A</div>
+        <div class="sw-use">オプション使用。「杜の都」の緑をニュートラルに抽出した色。写真トーンの指定に活用</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="paper-grid">
+    <div class="paper-card">
+      <div class="paper-label">Recommended / 本刷り</div>
+      <h4>OKマットコート N<br>135kg</h4>
+      <p>マットコートの中でも最も「手触り感」が上品。適度なコシと沈んだ発色が、ミニマルデザインの余白を生かす。金インク印刷との相性◎</p>
+    </div>
+    <div class="paper-card">
+      <div class="paper-label">Premium Option</div>
+      <h4>ヴァンヌーボVFS<br>110kg</h4>
+      <p>微細な布目テクスチャが指に伝わる高級感。「部屋に飾りたい」という感覚は、この紙質が8割方実現する。ただし印刷コスト＋40%を想定すること。</p>
+    </div>
+    <div class="paper-card">
+      <div class="paper-label">Budget Option</div>
+      <h4>モデラトーンGA<br>100kg</h4>
+      <p>やや温かみのある中性紙。クリーム系の地色がデザインと相乗効果を生む。ローコストでも上品に仕上がるエントリー選択肢。</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====== 4. VISUAL DIRECTION ====== -->
+<section class="section">
+  <div class="section-label">
+    <span class="num">04</span>
+    <span class="title">Visual Direction — Photography Tone</span>
+  </div>
+
+  <div class="visual-grid">
+    <div class="vd-card">
+      <div class="vd-icon"></div>
+      <h4>彩度 / Saturation</h4>
+      <p>彩度は標準の<strong style="font-weight:400">−20〜−30%</strong>で運用。鮮やかすぎる色はチラシの余白の空気感を壊す。ただし「くすみ系」ではなく、深みのある沈んだ発色を目指すこと。彩度を単純に下げるのではなく、HSL調整でHueも+5〜+10シフトし温かみを保持する。</p>
+      <span class="spec">Saturation: −25% / Hue shift: +8°</span>
+    </div>
+    <div class="vd-card">
+      <div class="vd-icon"></div>
+      <h4>コントラスト / Contrast</h4>
+      <p>ハイコントラストは禁止。ハイライトをやや抑え（−15）、シャドウも持ち上げる（+10）ことで「フィルム的な柔らかさ」を作る。紙の質感と写真の調子が溶け合うよう、最暗部は純黒ではなく<strong style="font-weight:400">#1A1817</strong>相当に留める。</p>
+      <span class="spec">Highlights: −15 / Shadows: +10 / Blacks: +8</span>
+    </div>
+    <div class="vd-card">
+      <div class="vd-icon"></div>
+      <h4>ライティング / Lighting</h4>
+      <p>撮影の光源は自然光もしくは<strong style="font-weight:400">拡散した間接光</strong>のみ。直射光・スポットライトは影が強くなりすぎ、チラシのミニマルな空気感を崩す。理想は「北窓から差し込む昼の光」。作品と背景の境界が柔らかく溶けるよう、背景はニュートラルグレー〜リネン系で統一。</p>
+      <span class="spec">Color temp: 4800–5200K / Diffused natural light</span>
+    </div>
+    <div class="vd-card">
+      <div class="vd-icon"></div>
+      <h4>構図 / Composition</h4>
+      <p>作品は常に<strong style="font-weight:400">フレームの中央より若干上・左寄り</strong>に配置し、右下に大きな余白を作る。その余白がチラシのテキストゾーンへ視線を自然に流す役割を担う。作品の「全景」より「一部」を見せる切り取り方で、見る者の想像力を刺激する手法も有効。</p>
+      <span class="spec">Subject position: upper-left / Negative space: 40%+</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====== 5. SNS INTEGRATION ====== -->
+<section class="section">
+  <div class="section-label">
+    <span class="num">05</span>
+    <span class="title">SNS Bridge — Physical to Digital</span>
+  </div>
+
+  <div class="sns-layout">
+    <div class="sns-card">
+      <div class="sns-label">Strategy</div>
+      <h4>QRコードの「デザイン化」</h4>
+      <p>QRコードをチラシの隅に小さく置くのではなく、<strong style="font-weight:400">フッターバーの一要素</strong>として設計する。ダークバーの中に白抜きのQRが「窓」のように浮かぶ視覚的処理で、スキャンへの心理的ハードルを下げる。コードの周囲に「@mori_creator_ex / 出展者一覧・限定映像」等のマイクロコピーを配置し、スキャンする動機を明示する。</p>
+    </div>
+    <div class="sns-card dark">
+      <div class="sns-label">Tactile Trigger</div>
+      <h4>「部屋に飾る」ための<br>余白設計</h4>
+      <p>チラシ上部に意図的に<strong style="font-weight:400">15mmの白帯</strong>を設ける。これにより額装したときに美しく見える構成になる。同時に「このチラシを飾っている写真を #杜のクリエイター展 でシェアしてください」というSNS誘導文を小さく入れることで、チラシ自体がUGCの起点となる仕掛けを作る。</p>
+      <div class="qr-demo">
+        <span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span>
+        <span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span>
+        <span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span>
+        <span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span>
+        <span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span>
+        <span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span>
+        <span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span><span style="background:var(--paper)"></span><span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====== FINAL FLYER MOCKUP ====== -->
+<div class="final-section">
+  <p class="final-label">Visual Mockup — Flyer Design Proposal</p>
+
+  <div class="flyer-full">
+    <!-- Image Zone -->
+    <div class="flyer-image-zone">
+      <img src="image.png" class="flyer-photo" alt="作品写真">
+      <div class="flyer-top-bar">
+        <span>2026</span>
+        <span>Creator Exhibition</span>
+      </div>
+      <div class="art-shape as1"></div>
+      <div class="art-shape as2"></div>
+      <div class="art-shape as3"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="flyer-content">
+      <div class="flyer-meta">
+        <div class="line"></div>
+        <span>Mori no Miyako</span>
+      </div>
+
+      <div class="flyer-catch">
+        日常を彩る、世界にひとつだけの作品に出会う。
+      </div>
+
+      <div class="flyer-title-main">杜の都のクリエイター展 2026</div>
+      <div class="flyer-title-sub">Creator Exhibition</div>
+
+      <div class="flyer-divider"></div>
+
+      <div class="flyer-info">
+        <div class="flyer-info-item">
+          <div class="info-label">Date</div>
+          <div class="info-value">
+            2026.08.21 FRI<br>
+            ——— 08.30 SUN
+          </div>
+        </div>
+        <div class="flyer-info-item">
+          <div class="info-label">Time</div>
+          <div class="info-value">
+            10:00 — 19:00<br>
+            <span style="font-size:10px;color:#8A847C;">最終日は17:00まで</span>
+          </div>
+        </div>
+        <div class="flyer-info-item">
+          <div class="info-label">Venue</div>
+          <div class="info-value">
+            仙台メディアテーク<br>
+            1Fオープンスクエア
+          </div>
+        </div>
+        <div class="flyer-info-item">
+          <div class="info-label">Creators</div>
+          <div class="info-value">
+            厳選 約50組<br>
+            <span style="font-size:10px;color:#8A847C;">各地より参集</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flyer-bottom">
+        <div class="flyer-sns">
+          <span class="sns-handle">@mori_creator_ex</span>
+          <span class="sns-handle">Instagram / X / Web</span>
+          <span class="sns-note">出展者一覧・最新情報はこちら →</span>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:20px;">
+          <div class="flyer-free-badge">
+            <span class="free-ja">入場無料</span>
+            <span class="free-en">Free</span>
+          </div>
+          <div class="flyer-qr-area">
+            <div class="flyer-qr">
+              <div class="q"></div><div class="b"></div><div class="q"></div><div class="b"></div><div class="q"></div>
+              <div class="b"></div><div class="q"></div><div class="b"></div><div class="q"></div><div class="b"></div>
+              <div class="q"></div><div class="b"></div><div class="q"></div><div class="b"></div><div class="q"></div>
+              <div class="b"></div><div class="q"></div><div class="b"></div><div class="q"></div><div class="b"></div>
+              <div class="q"></div><div class="b"></div><div class="q"></div><div class="b"></div><div class="q"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer bar -->
+    <div class="flyer-footer">
+      <span>主催：杜の都クリエイター展実行委員会</span>
+      <span class="footer-accent">2026 SENDAI</span>
+    </div>
+  </div>
+
+  <p style="text-align:center;margin-top:32px;font-size:10px;font-weight:200;letter-spacing:0.25em;color:#8A847C;">
+    ※ メインビジュアルゾーンには実際の出展作品写真を配置。上記はレイアウト・色調の確認用モックアップです。
+  </p>
+</div>
+
+</body>
+</html>
