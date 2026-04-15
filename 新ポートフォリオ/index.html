@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sunny Side Design — LP Design Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       CSS VARIABLES & RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Logo-aligned palette */
+      --bg:          #F9F6F0;
+      --ink:         #3D3530;
+      --ink-light:   #7A7570;
+      --sun:         #F5C518;
+      --orange:      #F5A623;
+      --terracotta:  #E07A5F;
+      --sage:        #81B29A;
+      --white:       #FFFFFF;
+      --border:      rgba(61,53,48,0.10);
+      --border-dark: rgba(249,246,240,0.10);
+
+      --font-min:    'Shippori Mincho', serif;
+      --font-sans:   'Noto Sans JP', sans-serif;
+      --font-en:     'Cormorant Garamond', serif;
+
+      --ease:        cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-in:     cubic-bezier(0.45, 0, 0.25, 1);
+
+      --gap:         clamp(72px, 10vw, 140px);
+      --w:           min(1160px, 92vw);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.8;
+      letter-spacing: 0.02em;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      z-index: 9998;
+      pointer-events: none;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px;
+    }
+
+    /* ============================================================
+       CUSTOM CURSOR
+    ============================================================ */
+    #cur {
+      position: fixed; top:0; left:0;
+      width:10px; height:10px;
+      background: var(--terracotta);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%,-50%);
+      transition: width .3s var(--ease), height .3s var(--ease), background .3s;
+    }
+    #cur.big {
+      width:40px; height:40px;
+      background: transparent;
+      border: 1.5px solid var(--terracotta);
+    }
+    #cur-f {
+      position: fixed; top:0; left:0;
+      width:32px; height:32px;
+      border: 1px solid rgba(224,122,95,.3);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform .35s var(--ease);
+    }
+
+    /* ============================================================
+       UTILITIES
+    ============================================================ */
+    .wrap { width: var(--w); margin: 0 auto; }
+    .label {
+      font-family: var(--font-en);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+    .label--light { color: rgba(249,246,240,.4); }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+    }
+    .reveal.on { opacity:1; transform:none; }
+    .d1{transition-delay:.08s} .d2{transition-delay:.18s}
+    .d3{transition-delay:.28s} .d4{transition-delay:.40s}
+
+    /* btn styles */
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-sans); font-size: 14px;
+      font-weight: 400; letter-spacing: .06em;
+      text-decoration: none; border: none;
+      cursor: none;
+      border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;
+      transition: transform .35s var(--ease), box-shadow .35s, background .3s, color .3s;
+    }
+    .btn:hover { transform: translateY(-4px); }
+    .btn svg { transition: transform .3s var(--ease); }
+    .btn:hover svg { transform: translateX(4px); }
+
+    .btn-primary {
+      background: var(--terracotta); color: var(--white);
+      padding: 16px 34px;
+      box-shadow: 0 4px 20px rgba(224,122,95,.25);
+    }
+    .btn-primary:hover { box-shadow: 0 12px 36px rgba(224,122,95,.38); }
+
+    .btn-dark {
+      background: var(--ink); color: var(--bg);
+      padding: 18px 44px;
+      font-size: 15px;
+    }
+    .btn-dark:hover { background: var(--terracotta); box-shadow: 0 12px 36px rgba(224,122,95,.3); }
+
+    .btn-outline {
+      background: transparent; color: var(--bg);
+      padding: 14px 28px;
+      border: 1px solid rgba(249,246,240,.3);
+    }
+    .btn-outline:hover { background: rgba(249,246,240,.1); }
+
+    .btn-ghost {
+      font-size: 13px; font-weight: 300; letter-spacing: .06em;
+      color: var(--ink); text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-ghost::after { content:'↓'; display:inline-block; transition: transform .3s var(--ease); }
+    .btn-ghost:hover::after { transform: translateY(4px); }
+    .btn-ghost--right::after { content:'→'; }
+    .btn-ghost--right:hover::after { transform: translateX(4px); }
+
+    /* section heading */
+    .sec-head { margin-bottom: 56px; }
+    .sec-title {
+      font-family: var(--font-min);
+      font-size: clamp(26px, 3.8vw, 46px);
+      font-weight: 500; letter-spacing: .04em; line-height: 1.3;
+      margin-top: 8px;
+    }
+    .sec-title em {
+      font-style: italic;
+      font-family: var(--font-en);
+      color: var(--terracotta);
+      font-size: .88em;
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    .nav {
+      position: fixed; top:0; left:0; right:0;
+      z-index: 900;
+      padding: 20px 0;
+      transition: background .4s var(--ease), padding .4s, box-shadow .4s;
+    }
+    .nav.stuck {
+      background: rgba(249,246,240,.93);
+      backdrop-filter: blur(14px);
+      padding: 14px 0;
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .nav__inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* LOGO IMAGE */
+    .nav__logo { text-decoration: none; display: flex; align-items: center; }
+    .nav__logo-img { height: 40px; width: auto; display: block; }
+
+    .nav__links { display: flex; gap: 32px; list-style: none; }
+    .nav__links a {
+      font-size: 13px; font-weight: 300; letter-spacing: .06em;
+      color: var(--ink); text-decoration: none; position: relative;
+    }
+    .nav__links a::after {
+      content: ''; position: absolute; bottom:-2px; left:0;
+      width:0; height:1px; background: var(--terracotta);
+      transition: width .35s var(--ease);
+    }
+    .nav__links a:hover::after { width: 100%; }
+
+    .nav__cta {
+      font-size: 12px; font-weight: 400; letter-spacing: .08em;
+      color: var(--white); background: var(--terracotta);
+      padding: 9px 20px;
+      border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;
+      text-decoration: none;
+      transition: transform .3s var(--ease), box-shadow .3s, background .3s;
+    }
+    .nav__cta:hover {
+      background: var(--ink); transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(61,53,48,.2);
+    }
+
+    /* mobile */
+    .nav__burger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: none;
+    }
+    .nav__burger span { display: block; width: 22px; height: 1px; background: var(--ink); transition: transform .3s; }
+    .nav__mobile { display: none; }
+
+    @media (max-width: 860px) {
+      .nav__links, .nav__cta { display: none; }
+      .nav__burger { display: flex; }
+      .nav__mobile {
+        position: fixed; inset: 0; background: rgba(249,246,240,.97);
+        backdrop-filter: blur(16px);
+        z-index: 800; flex-direction: column;
+        align-items: center; justify-content: center; gap: 32px;
+      }
+      .nav__mobile.open { display: flex; }
+      .nav__mobile a {
+        font-family: var(--font-min); font-size: 22px; letter-spacing: .06em;
+        color: var(--ink); text-decoration: none;
+      }
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      min-height: 100svh;
+      display: flex; align-items: center;
+      padding: 120px 0 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero__watermark {
+      position: absolute; right: -2%; top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-en);
+      font-size: clamp(72px, 14vw, 192px);
+      font-weight: 300; font-style: italic;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(61,53,48,.055);
+      pointer-events: none; white-space: nowrap; line-height: 1;
+    }
+    .hero__grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: center;
+    }
+    .hero__label { margin-bottom: 20px; }
+    .hero__h1 {
+      font-family: var(--font-min);
+      font-size: clamp(34px, 5vw, 68px);
+      font-weight: 500; line-height: 1.35; letter-spacing: .03em;
+      margin-bottom: 26px;
+    }
+    .hero__h1 mark {
+      background: none; color: var(--terracotta);
+      position: relative; display: inline;
+    }
+    .hero__h1 mark::after {
+      content: '';
+      position: absolute; bottom: 1px; left: 0; right: 0;
+      height: 2px; background: var(--terracotta); opacity: .25;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 1.1s var(--ease) .9s;
+    }
+    .hero__h1 mark.on::after { transform: scaleX(1); }
+    .hero__sub {
+      font-size: 15px; font-weight: 300; color: var(--ink-light);
+      line-height: 1.95; max-width: 440px; margin-bottom: 16px;
+    }
+    .hero__note {
+      font-size: 12px; font-weight: 300; color: var(--ink-light);
+      letter-spacing: .04em; margin-bottom: 40px;
+      padding-left: 12px; border-left: 2px solid var(--terracotta);
+      opacity: .75;
+    }
+    .hero__actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .hero__micro {
+      font-size: 11px; font-weight: 300; color: var(--ink-light);
+      letter-spacing: .04em; margin-top: 10px;
+    }
+
+    /* Hero visual / card stack */
+    .hero__visual { position: relative; }
+    .hero__stack { position: relative; width: 320px; height: 420px; margin: 0 auto; }
+    .hcard {
+      position: absolute;
+      border-radius: 18px; overflow: hidden;
+      box-shadow: 0 18px 52px rgba(61,53,48,.13);
+    }
+    .hcard:nth-child(1) { width: 290px; top:0; left:20px; transform:rotate(2.8deg); z-index:1; }
+    .hcard:nth-child(2) { width: 270px; top:130px; left:0; transform:rotate(-1.6deg); z-index:2; }
+    .hcard:nth-child(3) { width: 260px; top:215px; left:55px; transform:rotate(.9deg); z-index:3; }
+    .hcard__body { padding: 18px 18px 22px; background: var(--white); }
+    .hcard__tag {
+      font-family: var(--font-en); font-size: 9px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 6px;
+    }
+    .hcard__title {
+      font-family: var(--font-min); font-size: 13px;
+      font-weight: 500; letter-spacing: .03em; line-height: 1.5;
+    }
+    .hcard__concept {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 9px; letter-spacing: .1em;
+      color: var(--ink-light); margin-top: 8px;
+      padding: 3px 8px; border: 1px solid var(--border);
+      border-radius: 99px;
+    }
+
+    /* scroll indicator */
+    .hero__scroll {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .hero__scroll-text {
+      font-family: var(--font-en); font-size: 9px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--ink-light); writing-mode: vertical-rl;
+    }
+    .hero__scroll-line {
+      width: 1px; height: 44px;
+      background: linear-gradient(to bottom, var(--terracotta), transparent);
+      animation: sl 2s var(--ease) infinite;
+    }
+    @keyframes sl {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* ============================================================
+       PHILOSOPHY
+    ============================================================ */
+    .philosophy {
+      padding: var(--gap) 0;
+      background: var(--ink); position: relative; overflow: hidden;
+    }
+    .philosophy::after {
+      content: 'Why Psychology?';
+      position: absolute; bottom: -8%; right: -1%;
+      font-family: var(--font-en); font-size: clamp(48px, 8vw, 110px);
+      font-weight: 300; font-style: italic;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(249,246,240,.05);
+      pointer-events: none; white-space: nowrap;
+    }
+    .philosophy__inner {
+      display: grid; grid-template-columns: 1fr 1.4fr;
+      gap: 72px; align-items: center; position: relative;
+    }
+    .philosophy__left {}
+    .philosophy__heading {
+      font-family: var(--font-min);
+      font-size: clamp(22px, 3vw, 38px);
+      font-weight: 500; letter-spacing: .04em; line-height: 1.55;
+      color: var(--bg); margin-top: 12px; margin-bottom: 24px;
+    }
+    .philosophy__text {
+      font-size: 14px; font-weight: 300; color: rgba(249,246,240,.6);
+      line-height: 1.95;
+    }
+    .philosophy__text + .philosophy__text { margin-top: 16px; }
+
+    .philosophy__cards { display: flex; flex-direction: column; gap: 14px; }
+    .pcard {
+      background: rgba(249,246,240,.06);
+      border: 1px solid rgba(249,246,240,.1);
+      border-radius: 16px; padding: 22px 24px;
+      transition: background .3s, border-color .3s, transform .4s var(--ease);
+    }
+    .pcard:hover {
+      background: rgba(249,246,240,.1);
+      border-color: rgba(224,122,95,.4);
+      transform: translateX(6px);
+    }
+    .pcard__label {
+      font-family: var(--font-en); font-size: 10px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 8px;
+    }
+    .pcard__title {
+      font-family: var(--font-min); font-size: 15px;
+      font-weight: 500; color: var(--bg); letter-spacing: .04em;
+      margin-bottom: 6px;
+    }
+    .pcard__desc {
+      font-size: 12px; font-weight: 300;
+      color: rgba(249,246,240,.5); line-height: 1.75;
+    }
+
+    /* ============================================================
+       CONCEPT WORKS
+    ============================================================ */
+    .works { padding: var(--gap) 0; }
+    .works__sec-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 16px;
+    }
+    .concept-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 300; letter-spacing: .06em;
+      color: var(--ink-light);
+      background: rgba(224,122,95,.08);
+      border: 1px solid rgba(224,122,95,.2);
+      border-radius: 99px; padding: 5px 12px;
+      margin-bottom: 40px;
+    }
+    .concept-badge::before {
+      content: '✦'; color: var(--terracotta); font-size: 8px;
+    }
+
+    .works__grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+    .wcard {
+      border-radius: 24px; overflow: hidden;
+      text-decoration: none; color: inherit;
+      background: var(--white);
+      box-shadow: 0 4px 24px rgba(61,53,48,.07);
+      transition: transform .5s var(--ease), box-shadow .5s;
+      display: block;
+    }
+    .wcard:nth-child(1) { transform: rotate(-.7deg); }
+    .wcard:nth-child(2) { transform: rotate(.5deg); margin-top: 20px; }
+    .wcard:hover { transform: rotate(0) translateY(-8px); box-shadow: 0 22px 60px rgba(61,53,48,.15); }
+
+    .wcard__thumb {
+      aspect-ratio: 16/9; position: relative; overflow: hidden;
+    }
+    .wcard__bg {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .7s var(--ease);
+      position: relative;
+    }
+    .wcard:hover .wcard__bg { transform: scale(1.04); }
+    .wcard__bg--ng { background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%); }
+    .wcard__bg--bd { background: linear-gradient(135deg,#0d1b2a 0%,#1b263b 50%,#415a77 100%); }
+
+    /* mockup browser */
+    .mock {
+      width: 72%; border-radius: 10px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      overflow: hidden;
+    }
+    .mock__bar {
+      background: rgba(255,255,255,.06);
+      padding: 8px 10px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .mock__dot { width: 7px; height: 7px; border-radius: 50%; }
+    .mock__url {
+      flex: 1; height: 14px; border-radius: 4px;
+      background: rgba(255,255,255,.08); margin-left: 6px;
+    }
+    .mock__content { padding: 12px 10px; }
+    .mock__hero-area {
+      border-radius: 6px; margin-bottom: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-min);
+      font-size: 9px; letter-spacing: .06em;
+    }
+    .mock__hero-area--ng {
+      height: 52px;
+      background: linear-gradient(135deg, rgba(245,197,24,.2), rgba(245,166,35,.15));
+      color: rgba(255,255,255,.5);
+    }
+    .mock__hero-area--bd {
+      height: 52px;
+      background: linear-gradient(135deg, rgba(129,178,154,.2), rgba(65,90,119,.3));
+      color: rgba(255,255,255,.5);
+    }
+    .mock__lines { display: flex; flex-direction: column; gap: 5px; }
+    .mock__line {
+      height: 6px; border-radius: 3px;
+      background: rgba(255,255,255,.08);
+    }
+    .mock__cta {
+      height: 20px; border-radius: 4px; margin-top: 10px;
+      width: 50%;
+    }
+    .mock__cta--ng { background: rgba(245,166,35,.4); }
+    .mock__cta--bd { background: rgba(129,178,154,.4); }
+
+    .wcard__overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15,15,25,.6) 0%, transparent 50%);
+      opacity: 0; transition: opacity .4s;
+    }
+    .wcard:hover .wcard__overlay { opacity: 1; }
+    .wcard__view {
+      position: absolute; bottom: 20px; left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      font-family: var(--font-en); font-size: 11px;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--white); opacity: 0;
+      transition: opacity .4s, transform .4s var(--ease);
+      white-space: nowrap;
+    }
+    .wcard:hover .wcard__view { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .wcard__body { padding: 24px 26px 28px; }
+    .wcard__tag {
+      font-family: var(--font-en); font-size: 10px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 8px;
+    }
+    .wcard__title {
+      font-family: var(--font-min); font-size: 18px;
+      font-weight: 500; letter-spacing: .03em; line-height: 1.45;
+      margin-bottom: 8px;
+    }
+    .wcard__sub {
+      font-size: 12px; font-weight: 300;
+      color: var(--ink-light); line-height: 1.75; margin-bottom: 16px;
+    }
+    .wcard__pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill {
+      font-size: 10px; letter-spacing: .06em; font-weight: 300;
+      color: var(--ink); border: 1px solid var(--border);
+      padding: 4px 10px; border-radius: 99px;
+    }
+    .wcard__concept-note {
+      margin-top: 16px; padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 11px; font-weight: 300;
+      color: var(--ink-light); line-height: 1.7; letter-spacing: .02em;
+    }
+
+    /* ============================================================
+       SKILL
+    ============================================================ */
+    .skill {
+      padding: var(--gap) 0;
+      background: linear-gradient(180deg, var(--bg) 0%, #f0ebe0 100%);
+    }
+    .skill__grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px; margin-top: 0;
+    }
+    .scard {
+      background: var(--white); border-radius: 20px;
+      padding: 28px 26px;
+      border: 1px solid var(--border);
+      transition: transform .4s var(--ease), box-shadow .4s, border-color .3s;
+    }
+    .scard:hover {
+      transform: translateY(-6px) rotate(-.3deg);
+      box-shadow: 0 16px 44px rgba(61,53,48,.1);
+      border-color: rgba(224,122,95,.25);
+    }
+    .scard__icon {
+      width: 48px; height: 48px;
+      border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 16px;
+    }
+    .scard__icon--tc { background: rgba(224,122,95,.12); }
+    .scard__icon--sg { background: rgba(129,178,154,.15); }
+    .scard__icon--or { background: rgba(245,166,35,.12); }
+    .scard__title {
+      font-family: var(--font-min); font-size: 15px;
+      font-weight: 500; letter-spacing: .04em; margin-bottom: 10px;
+    }
+    .scard__items { display: flex; flex-direction: column; gap: 5px; }
+    .scard__item {
+      font-size: 12px; font-weight: 300;
+      color: var(--ink-light); letter-spacing: .02em;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .scard__item::before { content:'—'; color: var(--terracotta); flex-shrink: 0; font-size: 10px; margin-top: 4px; }
+
+    /* ============================================================
+       FLOW
+    ============================================================ */
+    .flow { padding: var(--gap) 0; }
+    .flow__steps {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 0; margin-top: 56px; position: relative;
+    }
+    .flow__steps::before {
+      content: '';
+      position: absolute; top: 28px; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), var(--border), transparent);
+    }
+    .fstep { padding: 0 12px; text-align: center; }
+    .fstep__num {
+      font-family: var(--font-en); font-size: 10px;
+      letter-spacing: .12em; color: var(--terracotta);
+      display: block; margin-bottom: 18px;
+    }
+    .fstep__icon {
+      width: 52px; height: 52px;
+      border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;
+      background: var(--bg); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px; font-size: 20px;
+      box-shadow: 0 4px 14px rgba(61,53,48,.06);
+    }
+    .fstep:nth-child(1) .fstep__icon {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      box-shadow: 0 6px 20px rgba(224,122,95,.3);
+    }
+    .fstep__title {
+      font-family: var(--font-min); font-size: 14px;
+      font-weight: 500; letter-spacing: .05em; margin-bottom: 8px;
+    }
+    .fstep__desc {
+      font-size: 11px; font-weight: 300;
+      color: var(--ink-light); line-height: 1.8;
+    }
+    .fstep__link {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; color: var(--terracotta);
+      text-decoration: none; font-weight: 400; letter-spacing: .04em;
+      margin-top: 10px;
+      transition: gap .3s var(--ease);
+    }
+    .fstep__link:hover { gap: 8px; }
+
+    /* ============================================================
+       FAQ
+    ============================================================ */
+    .faq { padding: var(--gap) 0; background: var(--ink); }
+    .faq__list { margin-top: 48px; display: flex; flex-direction: column; gap: 0; }
+    .faq__item {
+      border-bottom: 1px solid rgba(249,246,240,.08);
+    }
+    .faq__item:first-child { border-top: 1px solid rgba(249,246,240,.08); }
+    .faq__q {
+      width: 100%; background: none; border: none; cursor: none;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 24px 0; gap: 20px;
+      font-family: var(--font-min); font-size: 15px;
+      font-weight: 500; letter-spacing: .04em;
+      color: var(--bg); text-align: left;
+    }
+    .faq__icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1px solid rgba(249,246,240,.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 16px; color: var(--terracotta);
+      transition: transform .35s var(--ease), background .3s;
+    }
+    .faq__item.open .faq__icon { transform: rotate(45deg); background: rgba(224,122,95,.15); }
+    .faq__a {
+      overflow: hidden; max-height: 0;
+      transition: max-height .45s var(--ease), padding .4s;
+    }
+    .faq__a-inner {
+      padding: 0 0 24px;
+      font-size: 14px; font-weight: 300;
+      color: rgba(249,246,240,.55); line-height: 1.9;
+    }
+
+    /* ============================================================
+       CTA BANNER
+    ============================================================ */
+    .cta-banner {
+      padding: clamp(64px, 9vw, 120px) 0;
+      background: linear-gradient(135deg, #2a1f1a 0%, #1a1210 100%);
+      position: relative; overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 70% at 70% 50%, rgba(224,122,95,.12) 0%, transparent 70%);
+    }
+    .cta-banner__inner {
+      position: relative; text-align: center; max-width: 680px; margin: 0 auto;
+    }
+    .cta-banner__heading {
+      font-family: var(--font-min);
+      font-size: clamp(26px, 4vw, 50px);
+      font-weight: 500; letter-spacing: .04em; line-height: 1.45;
+      color: var(--bg); margin: 12px 0 18px;
+    }
+    .cta-banner__sub {
+      font-size: 14px; font-weight: 300;
+      color: rgba(249,246,240,.5); line-height: 1.9;
+      margin-bottom: 48px;
+    }
+    .cta-banner__actions { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .cta-banner__micro {
+      font-size: 11px; font-weight: 300;
+      color: rgba(249,246,240,.3); letter-spacing: .05em;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      background: #100d0b;
+      border-top: 1px solid rgba(249,246,240,.06);
+      padding: 28px 0;
+    }
+    .footer__inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer__logo { display: flex; align-items: center; }
+    .footer__logo-img { height: 28px; width: auto; opacity: 0.7; }
+    .footer__copy {
+      font-size: 11px; font-weight: 300;
+      color: rgba(249,246,240,.25); letter-spacing: .05em;
+    }
+    .footer__cta {
+      font-size: 12px; font-weight: 300; letter-spacing: .06em;
+      color: var(--terracotta); text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: gap .3s var(--ease);
+    }
+    .footer__cta:hover { gap: 10px; }
+
+    /* ============================================================
+       WORK DETAIL PAGE
+    ============================================================ */
+    .detail-page { display: none; }
+    .detail-page.show { display: block; }
+
+    .detail-hero {
+      min-height: 60vh; display: flex; align-items: flex-end;
+      padding: 120px 0 60px; position: relative; overflow: hidden;
+    }
+    .detail-hero--ng { background: linear-gradient(135deg,#1a1a2e 0%,#0f3460 100%); }
+    .detail-hero--bd { background: linear-gradient(135deg,#0d1b2a 0%,#415a77 100%); }
+    .detail-concept-note {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 300; letter-spacing: .06em;
+      color: rgba(249,246,240,.5);
+      background: rgba(249,246,240,.07);
+      border: 1px solid rgba(249,246,240,.12);
+      border-radius: 99px; padding: 6px 14px; margin-bottom: 24px;
+    }
+    .detail-title {
+      font-family: var(--font-min);
+      font-size: clamp(26px, 4vw, 52px);
+      font-weight: 500; color: var(--bg); letter-spacing: .04em;
+      line-height: 1.35; margin-bottom: 12px;
+    }
+    .detail-summary {
+      font-size: 15px; font-weight: 300;
+      color: rgba(249,246,240,.6); line-height: 1.85;
+      max-width: 580px;
+    }
+    .detail-meta {
+      display: flex; gap: 32px; margin-top: 32px; flex-wrap: wrap;
+    }
+    .detail-meta__item {}
+    .detail-meta__key {
+      font-family: var(--font-en); font-size: 10px;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(249,246,240,.35); margin-bottom: 4px;
+    }
+    .detail-meta__val {
+      font-size: 13px; font-weight: 300;
+      color: rgba(249,246,240,.75);
+    }
+
+    .detail-body { padding: clamp(48px,7vw,96px) 0; }
+    .detail-section { margin-bottom: clamp(48px,6vw,80px); }
+    .detail-section__label {
+      font-family: var(--font-en); font-size: 11px;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 20px;
+    }
+    .detail-section__heading {
+      font-family: var(--font-min); font-size: clamp(18px, 2.4vw, 28px);
+      font-weight: 500; letter-spacing: .04em; line-height: 1.4;
+      margin-bottom: 20px;
+    }
+    .detail-section__text {
+      font-size: 15px; font-weight: 300;
+      color: var(--ink-light); line-height: 1.95; margin-bottom: 14px;
+    }
+
+    .brief-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 14px; font-weight: 300;
+    }
+    .brief-table th, .brief-table td {
+      padding: 14px 18px; text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top; line-height: 1.7;
+    }
+    .brief-table th {
+      width: 28%; color: var(--ink-light);
+      font-weight: 300; font-family: var(--font-min);
+      letter-spacing: .04em; white-space: nowrap;
+    }
+    .brief-table tr:last-child th,
+    .brief-table tr:last-child td { border-bottom: none; }
+
+    .hypo-block {
+      background: rgba(224,122,95,.06);
+      border: 1px solid rgba(224,122,95,.18);
+      border-left: 3px solid var(--terracotta);
+      border-radius: 0 12px 12px 0;
+      padding: 22px 24px; margin: 24px 0;
+    }
+    .hypo-block__label {
+      font-family: var(--font-en); font-size: 10px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 10px;
+    }
+    .hypo-block__text {
+      font-family: var(--font-min); font-size: 15px;
+      font-weight: 500; letter-spacing: .04em; line-height: 1.7;
+    }
+
+    .psych-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 14px; margin-top: 24px;
+    }
+    .psych-card {
+      background: var(--white); border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 18px 20px;
+    }
+    .psych-card__name {
+      font-family: var(--font-en); font-size: 10px;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 6px;
+    }
+    .psych-card__title {
+      font-family: var(--font-min); font-size: 13px;
+      font-weight: 500; letter-spacing: .03em; margin-bottom: 6px;
+    }
+    .psych-card__desc {
+      font-size: 12px; font-weight: 300;
+      color: var(--ink-light); line-height: 1.75;
+    }
+
+    .focus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+    .focus-card {
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .focus-card__img {
+      aspect-ratio: 16/9;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+    }
+    .focus-card__body { padding: 18px 20px; }
+    .focus-card__tag {
+      font-family: var(--font-en); font-size: 9px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 6px;
+    }
+    .focus-card__title {
+      font-family: var(--font-min); font-size: 14px;
+      font-weight: 500; letter-spacing: .03em; margin-bottom: 8px;
+    }
+    .focus-card__desc {
+      font-size: 12px; font-weight: 300;
+      color: var(--ink-light); line-height: 1.75;
+    }
+
+    .reflection-list {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-top: 20px;
+    }
+    .reflection-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      font-size: 13px; font-weight: 300; color: var(--ink-light); line-height: 1.8;
+    }
+    .reflection-item::before {
+      content: ''; flex-shrink: 0;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--sage); margin-top: 8px;
+    }
+
+    .detail-cta {
+      background: var(--ink); border-radius: 24px;
+      padding: 44px 48px; text-align: center; margin-top: 64px;
+    }
+    .detail-cta__heading {
+      font-family: var(--font-min); font-size: clamp(18px,2.4vw,28px);
+      font-weight: 500; color: var(--bg); letter-spacing: .04em;
+      line-height: 1.5; margin: 10px 0 14px;
+    }
+    .detail-cta__sub {
+      font-size: 13px; font-weight: 300;
+      color: rgba(249,246,240,.5); line-height: 1.9;
+      margin-bottom: 30px;
+    }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; letter-spacing: .05em;
+      color: var(--ink-light); text-decoration: none;
+      background: none; border: none; cursor: none;
+      margin-bottom: 0;
+      transition: color .3s, gap .3s var(--ease);
+    }
+    .back-btn:hover { color: var(--terracotta); gap: 12px; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 900px) {
+      .hero__grid { grid-template-columns: 1fr; gap: 48px; }
+      .hero__visual { display: none; }
+      .philosophy__inner { grid-template-columns: 1fr; gap: 48px; }
+      .works__grid { grid-template-columns: 1fr; }
+      .wcard:nth-child(2) { margin-top: 0; }
+      .skill__grid { grid-template-columns: repeat(2, 1fr); }
+      .flow__steps { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+      .flow__steps::before { display: none; }
+      .focus-grid { grid-template-columns: 1fr; }
+      .psych-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 580px) {
+      .skill__grid { grid-template-columns: 1fr; }
+      .works__sec-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-f"></div>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo" onclick="showMain()">
+        <img src="SSDロゴデザイン.png" alt="Sunny Side Design" class="nav__logo-img" />
+      </a>
+      <ul class="nav__links">
+        <li><a href="#works" onclick="showMain()">Works</a></li>
+        <li><a href="#philosophy">About</a></li>
+        <li><a href="#skill">Skill</a></li>
+        <li><a href="#flow">Flow</a></li>
+      </ul>
+      <a href="https://coconala.com/" target="_blank" rel="noopener" class="nav__cta">
+        ✦ ここから相談する
+      </a>
+      <button class="nav__burger" id="burger" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="nav__mobile" id="mobileMenu">
+  <a href="#" onclick="closeMenu();showMain()">Home</a>
+  <a href="#works" onclick="closeMenu();showMain()">Works</a>
+  <a href="#skill" onclick="closeMenu()">Skill</a>
+  <a href="#flow" onclick="closeMenu()">Flow</a>
+  <a href="https://coconala.com/" target="_blank" rel="noopener" onclick="closeMenu()" style="color:var(--terracotta)">ここから相談する ✦</a>
+</div>
+
+<!-- ============================================================
+     MAIN PAGE
+============================================================ -->
+<div id="mainPage">
+
+  <!-- HERO --------------------------------------------------- -->
+  <section class="hero" id="hero">
+    <div class="hero__watermark">Design</div>
+    <div class="wrap">
+      <div class="hero__grid">
+        <div class="hero__copy">
+          <p class="label hero__label reveal">LP Design Studio · Sunny Side Design</p>
+          <p class="hero__target reveal" style="font-size:13px;font-weight:400;letter-spacing:.06em;color:var(--terracotta);margin-bottom:12px;line-height:1.6;">「デザインは綺麗なのに、なぜか売れない…」と悩む方へ</p>
+          <h1 class="hero__h1 reveal d1">
+            「なぜ離脱するのか」を<br>
+            先に設計する、<br>
+            <mark id="heroMark">LP制作</mark>を。
+          </h1>
+          <p class="hero__sub reveal d2">
+            「なぜここでページを閉じるのか」「なぜボタンを押さないのか」——その理由を先に考えてからデザインします。見た目の美しさだけでなく、読んだ人が自然と行動したくなる流れを、ひとつひとつ丁寧に作ります。LP公開後、スマホに問い合わせ通知が届くようになった——そんな毎日をつくることが、私の仕事です。
+          </p>
+          <p class="hero__note reveal d2">集客の不安から解放されて、<strong>本業に集中できる毎日</strong>を手に入れたい方へ。</p>
+          <div class="hero__actions reveal d3">
+            <a href="https://coconala.com/" target="_blank" rel="noopener" class="btn btn-primary">
+              ✦ まずはココナラで気軽に相談する（無料）
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href="#works" class="btn-ghost">実績を見る</a>
+          </div>
+          <p class="hero__micro reveal d4">ブラウザの別タブでプロフィールが開きます。「メッセージを送る」からお気軽にどうぞ。</p>
+          <p class="hero__micro reveal d4" style="margin-top:6px;color:var(--terracotta);font-weight:500;">※ポートフォリオ掲載を前提としたモニター価格でのご案内は、毎月5名様限定となります</p>
+        </div>
+        <div class="hero__visual reveal d2">
+          <div class="hero__stack">
+            <div class="hcard">
+              <div style="height:110px; background:linear-gradient(135deg,#1a1a2e,#0f3460); display:flex;align-items:center;justify-content:center;">
+                <div style="width:70%;border-radius:6px;background:rgba(255,255,255,.07);padding:10px;">
+                  <div style="height:28px;border-radius:4px;background:linear-gradient(135deg,rgba(245,197,24,.25),rgba(245,166,35,.2));margin-bottom:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-min);font-size:8px;color:rgba(255,255,255,.5);">NextGate LP</div>
+                  <div style="height:5px;border-radius:3px;background:rgba(255,255,255,.08);margin-bottom:4px;"></div>
+                  <div style="height:5px;border-radius:3px;background:rgba(255,255,255,.06);width:65%;"></div>
+                </div>
+              </div>
+              <div class="hcard__body">
+                <p class="hcard__tag">Human Resources · UX Strategy</p>
+                <p class="hcard__title">人材マッチングアカデミー<br>「NextGate」</p>
+                <span class="hcard__concept">✦ Concept Work</span>
+              </div>
+            </div>
+            <div class="hcard">
+              <div style="height:100px; background:linear-gradient(135deg,#0d1b2a,#415a77); display:flex;align-items:center;justify-content:center;">
+                <div style="width:70%;border-radius:6px;background:rgba(255,255,255,.07);padding:10px;">
+                  <div style="height:26px;border-radius:4px;background:linear-gradient(135deg,rgba(129,178,154,.2),rgba(65,90,119,.3));margin-bottom:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-min);font-size:8px;color:rgba(255,255,255,.5);">BrainDelegate LP</div>
+                  <div style="height:5px;border-radius:3px;background:rgba(255,255,255,.08);margin-bottom:4px;"></div>
+                  <div style="height:5px;border-radius:3px;background:rgba(255,255,255,.06);width:60%;"></div>
+                </div>
+              </div>
+              <div class="hcard__body">
+                <p class="hcard__tag">AI SaaS · Information Architecture</p>
+                <p class="hcard__title">AIタスク管理アプリ<br>「BrainDelegate」</p>
+                <span class="hcard__concept">✦ Concept Work</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero__scroll">
+      <span class="hero__scroll-text">Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY --------------------------------------------- -->
+  <section class="philosophy" id="philosophy">
+    <div class="wrap">
+      <div class="philosophy__inner">
+        <div class="philosophy__left">
+          <p class="label label--light reveal">Why Psychology?</p>
+          <h2 class="philosophy__heading reveal d1">
+            デザインの前に、<br>「なぜ動かないか」を<br>解く。
+          </h2>
+          <p class="philosophy__text reveal d2">
+            「申し込みたい気持ちはあるのに、なんとなく不安で止まってしまう」——ほとんどの離脱はこれが原因です。きれいなデザインにしても成果が出ないのは、<strong style="color:var(--bg)">「人がどこで迷い、何が不安で、どんな言葉で動くか」</strong>を考えていないからです。
+          </p>
+          <p class="philosophy__text reveal d3">
+            Sunny Side Designは、「人はどんな順番で目を動かすか」「どんな言葉が行動のきっかけになるか」という人の心理をもとにLPを設計します。「なぜこの配置なのか」を、すべてきちんと説明できるデザインを作ります。その結果、お客さまの方からページを見て申し込みたくなる——問い合わせが止まらない状態を、設計の力でつくります。
+          </p>
+        </div>
+        <div class="philosophy__cards reveal d2">
+          <div class="pcard">
+            <p class="pcard__label">押しやすさの設計</p>
+            <p class="pcard__title">「押したい」と思った瞬間に、すぐ手が届く。</p>
+            <p class="pcard__desc">スマホで親指が届きやすい場所・十分な大きさのボタンを配置します。「押そうとしたのに押しづらかった」というストレスをなくします。</p>
+          </div>
+          <div class="pcard">
+            <p class="pcard__label">余白で伝える整理術</p>
+            <p class="pcard__title">線で囲まなくても、スッと読める画面を作る。</p>
+            <p class="pcard__desc">余白の「近い・遠い」だけで情報のまとまりを伝えます。ごちゃごちゃした印象をなくし、読む人が迷わない画面を設計します。</p>
+          </div>
+          <div class="pcard">
+            <p class="pcard__label">共感から始めるコピー</p>
+            <p class="pcard__title">まず「わかるよ」から始めて、希望につなぐ。</p>
+            <p class="pcard__desc">ページの冒頭でまず「あなたのその悩み、わかります」と共感し、そこから「こうなれますよ」という希望へと自然につなぎます。読んだ人が「自分のことだ」と感じる文章の流れを作ります。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT WORKS ------------------------------------------ -->
+  <section class="works" id="works">
+    <div class="wrap">
+      <div class="works__sec-head reveal">
+        <div>
+          <p class="label">Concept Works</p>
+          <h2 class="sec-title" style="margin-top:8px;">設計力で語る、<em>作品集</em></h2>
+        </div>
+        <a href="#flow" class="btn-ghost btn-ghost--right">依頼の流れを見る</a>
+      </div>
+      <p class="concept-badge reveal">本セクションの作品はすべて、設計力の実証を目的とした架空のコンセプトワークです</p>
+
+      <div class="works__grid">
+
+        <!-- Work 01: NextGate -->
+        <div class="wcard reveal" onclick="showDetail('ng')">
+          <div class="wcard__thumb">
+            <div class="wcard__bg wcard__bg--ng">
+              <div class="mock">
+                <div class="mock__bar">
+                  <div class="mock__dot" style="background:#f5c518;"></div>
+                  <div class="mock__dot" style="background:#f5a623;"></div>
+                  <div class="mock__dot" style="background:#e07a5f;"></div>
+                  <div class="mock__url"></div>
+                </div>
+                <div class="mock__content">
+                  <div class="mock__hero-area mock__hero-area--ng">NextGate — 転職の不安を、自信に変える。</div>
+                  <div class="mock__lines">
+                    <div class="mock__line" style="width:100%"></div>
+                    <div class="mock__line" style="width:70%"></div>
+                  </div>
+                  <div class="mock__cta mock__cta--ng"></div>
+                </div>
+              </div>
+              <div class="wcard__overlay"></div>
+              <p class="wcard__view">View Case Study →</p>
+            </div>
+          </div>
+          <div class="wcard__body">
+            <p class="wcard__tag">Human Resources · Career Academy</p>
+            <h3 class="wcard__title">人材マッチングアカデミー「NextGate」</h3>
+            <p class="wcard__sub">転職を考えているけど不安で踏み出せない人に向けて、「ここなら安心できる」と感じてもらえるLPをどう設計するか、その考え方をまとめた作品です。</p>
+            <div class="wcard__pills">
+              <span class="pill">共感から始める設計</span>
+              <span class="pill">余白で読みやすく</span>
+              <span class="pill">他の人の声で安心感</span>
+              <span class="pill">ボタンの言葉を丁寧に</span>
+            </div>
+            <p class="wcard__concept-note">✦ Concept Work — 実在する企業・サービスとは無関係の架空の設計事例です。</p>
+          </div>
+        </div>
+
+        <!-- Work 02: BrainDelegate -->
+        <div class="wcard reveal d1" onclick="showDetail('bd')">
+          <div class="wcard__thumb">
+            <div class="wcard__bg wcard__bg--bd">
+              <div class="mock">
+                <div class="mock__bar">
+                  <div class="mock__dot" style="background:#81b29a;"></div>
+                  <div class="mock__dot" style="background:#415a77;"></div>
+                  <div class="mock__dot" style="background:#778da9;"></div>
+                  <div class="mock__url"></div>
+                </div>
+                <div class="mock__content">
+                  <div class="mock__hero-area mock__hero-area--bd">BrainDelegate — 思考を、AIに委ねる。</div>
+                  <div class="mock__lines">
+                    <div class="mock__line" style="width:100%"></div>
+                    <div class="mock__line" style="width:60%"></div>
+                  </div>
+                  <div class="mock__cta mock__cta--bd"></div>
+                </div>
+              </div>
+              <div class="wcard__overlay"></div>
+              <p class="wcard__view">View Case Study →</p>
+            </div>
+          </div>
+          <div class="wcard__body">
+            <p class="wcard__tag">AI SaaS · Productivity Tool</p>
+            <h3 class="wcard__title">AIタスク管理アプリ「BrainDelegate」</h3>
+            <p class="wcard__sub">「AIって難しそう…」という不安を持つ人に、使い始めるまでのハードルをとことん下げる設計を考えた作品です。</p>
+            <div class="wcard__pills">
+              <span class="pill">情報を絞って読みやすく</span>
+              <span class="pill">目の動きを計算した配置</span>
+              <span class="pill">小さな一歩から始める導線</span>
+              <span class="pill">「今動かないと損」の演出</span>
+            </div>
+            <p class="wcard__concept-note">✦ Concept Work — 実在する企業・サービスとは無関係の架空の設計事例です。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILL -------------------------------------------------- -->
+  <section class="skill" id="skill">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="label">Skill & Tool</p>
+        <h2 class="sec-title" style="margin-top:8px;">得意領域と<em>ツール</em></h2>
+      </div>
+      <div class="skill__grid">
+        <div class="scard reveal">
+          <div class="scard__icon scard__icon--tc">🎯</div>
+          <h3 class="scard__title">LP全体の構成・設計</h3>
+          <div class="scard__items">
+            <span class="scard__item">読む人の気持ちの流れを設計</span>
+            <span class="scard__item">ページの骨格・構成づくり（Figma）</span>
+            <span class="scard__item">目が自然に動く配置の設計</span>
+            <span class="scard__item">申し込みまで迷わせない導線づくり</span>
+          </div>
+        </div>
+        <div class="scard reveal d1">
+          <div class="scard__icon scard__icon--sg">✦</div>
+          <h3 class="scard__title">ビジュアルデザイン</h3>
+          <div class="scard__items">
+            <span class="scard__item">LP・バナー・SNS用画像</span>
+            <span class="scard__item">ブランドに合った色・フォントの選定</span>
+            <span class="scard__item">見やすさ・読みやすさを重視した配色</span>
+            <span class="scard__item">スマホ・PCどちらでも美しく表示</span>
+          </div>
+        </div>
+        <div class="scard reveal d2">
+          <div class="scard__icon scard__icon--or">📐</div>
+          <h3 class="scard__title">コピー・文章の設計</h3>
+          <div class="scard__items">
+            <span class="scard__item">読んだ人が動きたくなる文章の構成</span>
+            <span class="scard__item">ターゲット分析・競合調査</span>
+            <span class="scard__item">ボタンの言葉など細部の文章まで対応</span>
+            <span class="scard__item">「どう変えたら効果が出るか」の言語化</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOW --------------------------------------------------- -->
+  <section class="flow" id="flow">
+    <div class="wrap">
+      <div class="sec-head reveal" style="text-align:center;">
+        <p class="label" style="justify-content:center;display:flex;">How We Work</p>
+        <h2 class="sec-title" style="margin-top:8px;">ご依頼の<em>流れ</em></h2>
+      </div>
+      <div class="flow__steps">
+        <div class="fstep reveal">
+          <span class="fstep__num">01</span>
+          <div class="fstep__icon" style="font-size:16px;">💬</div>
+          <h3 class="fstep__title">ご相談</h3>
+          <p class="fstep__desc">どんな些細な内容でも大丈夫です。まずお気軽にメッセージを。</p>
+          <a href="https://coconala.com/" target="_blank" rel="noopener" class="fstep__link">
+            ここから相談 ↗
+          </a>
+        </div>
+        <div class="fstep reveal d1">
+          <span class="fstep__num">02</span>
+          <div class="fstep__icon">🔍</div>
+          <h3 class="fstep__title">ヒアリング</h3>
+          <p class="fstep__desc">どんなサービスか、誰に届けたいか、今の悩みは何かをじっくりお聞きします。ここで方向性を一緒に決めます。</p>
+        </div>
+        <div class="fstep reveal d2">
+          <span class="fstep__num">03</span>
+          <div class="fstep__icon">📐</div>
+          <h3 class="fstep__title">設計</h3>
+          <p class="fstep__desc">「なぜそこにその要素を置くのか」を言葉で説明しながら、ページの構成と文章の骨格を作ります。</p>
+        </div>
+        <div class="fstep reveal d3">
+          <span class="fstep__num">04</span>
+          <div class="fstep__icon">✦</div>
+          <h3 class="fstep__title">デザイン</h3>
+          <p class="fstep__desc">構成をもとに、ブランドらしさと使いやすさを両立したビジュアルを仕上げます。確認しながら一緒に作ります。</p>
+        </div>
+        <div class="fstep reveal d4">
+          <span class="fstep__num">05</span>
+          <div class="fstep__icon">🚀</div>
+          <h3 class="fstep__title">納品</h3>
+          <p class="fstep__desc">デザインデータ・画像・HTMLコーディングなど、ご希望の形式でお渡しします。公開後のご相談も歓迎です。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ ---------------------------------------------------- -->
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <div class="sec-head reveal" style="display:flex;justify-content:space-between;align-items:flex-end;">
+        <div>
+          <p class="label label--light">FAQ</p>
+          <h2 class="sec-title" style="margin-top:8px;color:var(--bg);">よくある<em>質問</em></h2>
+        </div>
+      </div>
+      <div class="faq__list reveal">
+        <div class="faq__item">
+          <button class="faq__q" onclick="toggleFaq(this)">
+            どのような案件を受け付けていますか？
+            <span class="faq__icon">+</span>
+          </button>
+          <div class="faq__a">
+            <div class="faq__a-inner">LP（商品・サービスの紹介ページ）の新規制作、または既存LPのリニューアルを主にお受けしています。業種・商材は問いません。特に「申し込みや問い合わせを増やしたい」「アクセスはあるのに成果が出ない」とお悩みの方に、最も力を発揮できます。まずはお気軽にご相談ください。</div>
+          </div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" onclick="toggleFaq(this)">
+            実績がない状態でも依頼して大丈夫ですか？
+            <span class="faq__icon">+</span>
+          </button>
+          <div class="faq__a">
+            <div class="faq__a-inner">このポートフォリオに載っている作品は、「どんなふうに設計を考えるか」を見ていただくための練習作品（架空のもの）です。数字での実績はまだありませんが、「なぜそのデザインにしたのか」をきちんと説明できることが私の強みです。正直にお伝えした上で、誠実に取り組みますので、お気軽にご相談いただければ幸いです。<br><br>また現在、ポートフォリオ掲載へのご協力（実績作り）を前提とした、数名様限定のモニター価格プランをご用意しております。「今だからこそ」お得にご依頼いただけるチャンスです。ぜひお気軽にご相談ください。</div>
+          </div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" onclick="toggleFaq(this)">
+            納期の目安はどのくらいですか？
+            <span class="faq__icon">+</span>
+          </button>
+          <div class="faq__a">
+            <div class="faq__a-inner">ヒアリングから納品まで、通常1〜2週間程度を目安にしています。ただし、LPの規模や修正回数によって変動します。お急ぎの場合はご相談ください。ご予算と納期のバランスを取りながら最適なプランをご提案します。</div>
+          </div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" onclick="toggleFaq(this)">
+            コーディング（HTML/CSS）まで対応できますか？
+            <span class="faq__icon">+</span>
+          </button>
+          <div class="faq__a">
+            <div class="faq__a-inner">はい、対応できます。デザインデータのお渡しだけでなく、HTMLとCSSを使ったページの実装まで一貫して行えます。WordPressなどのブログ・CMSへの組み込みや、既存サイトへの追加も対応可能です。詳しくはメッセージでお気軽にご確認ください。</div>
+          </div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" onclick="toggleFaq(this)">
+            ご依頼はどこからすればいいですか？
+            <span class="faq__icon">+</span>
+          </button>
+          <div class="faq__a">
+            <div class="faq__a-inner">ご依頼・ご相談はすべてココナラのプロフィールページ内「メッセージを送る」から受け付けています。このページ内にお問い合わせフォームや連絡先は設けていません。金額・内容のご確認もメッセージにてお気軽にどうぞ。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER --------------------------------------------- -->
+  <section class="cta-banner">
+    <div class="wrap">
+      <div class="cta-banner__inner">
+        <p class="label label--light reveal">Ready to start?</p>
+        <h2 class="cta-banner__heading reveal d1">
+          毎朝、問い合わせ通知を<br>確認するのが楽しみな日々へ。
+        </h2>
+        <p class="cta-banner__sub reveal d2">
+          集客のストレスから解放されて、本業に向き合える毎日——それを一緒に設計しましょう。<br>
+          価格・内容・スケジュール、どんな些細なご相談でも大丈夫です。<br>
+          2営業日以内にご返信いたします。
+        </p>
+        <div class="cta-banner__actions reveal d3">
+          <a href="https://coconala.com/" target="_blank" rel="noopener" class="btn btn-dark">
+            ✦ 無料相談をはじめる
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <p class="cta-banner__micro">ご依頼の確約は不要です。まずお気軽にどうぞ。<br>ブラウザの別タブでココナラのプロフィールが開きます。</p>
+          <p class="cta-banner__micro" style="margin-top:8px;color:var(--terracotta);font-weight:500;">※ポートフォリオ掲載を前提としたモニター価格でのご案内は、毎月5名様限定となります</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /mainPage -->
+
+<!-- ============================================================
+     DETAIL: NextGate
+============================================================ -->
+<div class="detail-page" id="detail-ng">
+  <div class="detail-hero detail-hero--ng">
+    <div class="wrap">
+      <span class="detail-concept-note">✦ Concept Work — 架空の設計事例です</span>
+      <h1 class="detail-title">人材マッチングアカデミー<br>「NextGate」LP</h1>
+      <p class="detail-summary">転職を考えているけど踏み出せない人に向けて、「ここなら安心して頼れる」と思ってもらえるLPをどう作るか——その設計の考え方をまとめた作品です。</p>
+      <div class="detail-meta">
+        <div class="detail-meta__item">
+          <p class="detail-meta__key">Category</p>
+          <p class="detail-meta__val">Human Resources / Career Academy</p>
+        </div>
+        <div class="detail-meta__item">
+          <p class="detail-meta__key">Role</p>
+          <p class="detail-meta__val">UX設計 / ワイヤーフレーム / デザイン</p>
+        </div>
+        <div class="detail-meta__item">
+          <p class="detail-meta__key">Type</p>
+          <p class="detail-meta__val">Concept Work（架空案件）</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-body">
+    <div class="wrap">
+
+      <div class="detail-section">
+        <p class="detail-section__label">The Brief</p>
+        <h2 class="detail-section__heading">想定した依頼背景と課題</h2>
+        <table class="brief-table">
+          <tr><th>想定クライアント</th><td>副業・才能発掘診断ツールの制作依頼</td></tr>
+          <tr><th>想定ターゲット</th><td>20〜40代・何か始めたいが「自分に何ができるか」がわからず一歩踏み出せていない層</td></tr>
+          <tr><th>想定の課題</th><td>「やりたい気持ちはある」のに自分の強みが見えず行動できないまま離脱。診断完了→カウンセリング申込CVRが低い（想定: 1.2%前後）</td></tr>
+          <tr><th>達成したいKPI</th><td>無料カウンセリング予約のCVR: 1.2% → 3.0% 以上への改善</td></tr>
+        </table>
+      </div>
+
+      <div class="detail-section">
+        <p class="detail-section__label">Hypothesis</p>
+        <h2 class="detail-section__heading">課題仮説とアプローチ</h2>
+        <div class="hypo-block">
+          <p class="hypo-block__label">設計の出発点となった考え</p>
+          <p class="hypo-block__text">「人が副業を始められない一番の理由は、意欲がないからではなく、『自分に何ができるか』が見えないことへの不安ではないか。才能の輪郭を30秒でデータを使って示してあげれば、次の行動への自信は一気に生まれるはず。」</p>
+        </div>
+        <p class="detail-section__text">この考えをもとに、「サービスを売る」のではなく「才能を明かす体験を届ける」方向に切り替えました。診断結果を見た瞬間に気持ちが最も高まる——そのタイミングに合わせてカウンセラーが現れる設計で、申し込みへの自然な流れを作っています。</p>
+        <div class="psych-grid">
+          <div class="psych-card">
+            <p class="psych-card__name">「1万人のデータ」で信頼を先取りする</p>
+            <p class="psych-card__title">権威性を冒頭に置くことで、結果への期待と信頼を同時に生む</p>
+            <p class="psych-card__desc">「1万人のデータが導く」というコピーを最初に見せることで、診断がはじまる前から「この結果は信頼できる」という安心感を作ります。信頼は最後ではなく最初に届ける設計です。</p>
+          </div>
+          <div class="psych-card">
+            <p class="psych-card__name">診断テスト形式で「参加者」にする</p>
+            <p class="psych-card__title">質問に答えてもらうだけで、受け身の閲覧者が能動的な当事者になる</p>
+            <p class="psych-card__desc">「完全無料・個人情報不要・約30秒」と明示することで最初の行動障壁を取り除き、5問の選択式テストを通じて読者を「参加者」に変えます。自分で答えた分だけ、結果への関心も高まります。</p>
+          </div>
+          <div class="psych-card">
+            <p class="psych-card__name">才能タイプに固有名詞と色を与える</p>
+            <p class="psych-card__title">「軍師タイプ」という名前が、結果を他人事でなく自分事にする</p>
+            <p class="psych-card__desc">「軍師」「クリエイター」などタイプに固有名詞を付け、強み・リスク・モチベーション源をカラー別に表示します。ラベルを与えられた瞬間、人は結果を深く自分のものとして受け取ります。</p>
+          </div>
+          <div class="psych-card">
+            <p class="psych-card__name">結果の直後にカウンセラーが登場する</p>
+            <p class="psych-card__title">気持ちが最も高まったタイミングに、顔と実績のある人物が現れる</p>
+            <p class="psych-card__desc">「田中エリコ（支援実績1,200名以上）」の紹介は、診断結果を受け取り感情が動いた直後に配置しています。人物の顔と具体的な実績を見ることで、次のステップへの安心感と背中の一押しを同時に届けます。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <p class="detail-section__label">Design Focus</p>
+        <h2 class="detail-section__heading">こだわりポイント</h2>
+        <div class="focus-grid">
+          <div class="focus-card">
+            <div class="focus-card__img" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);">🎯</div>
+            <div class="focus-card__body">
+              <p class="focus-card__tag">思わず答えたくなる「診断テスト形式」の導入</p>
+              <p class="focus-card__title">「自分に向いている副業は？」という興味が、自然な申し込みへの流れをつくる</p>
+              <p class="focus-card__desc">一方的にサービスを説明するのではなく、簡単な質問に答えてもらう「テスト形式」にしています。ユーザーに楽しみながら参加してもらうことで、売り込み感をなくし、自然な流れでサービスへの申し込みに繋げています。</p>
+            </div>
+          </div>
+          <div class="focus-card">
+            <div class="focus-card__img" style="background:linear-gradient(135deg,#0f3460,#533483);">🌿</div>
+            <div class="focus-card__body">
+              <p class="focus-card__tag">親しみやすさを生む「温かみのあるデザイン」</p>
+              <p class="focus-card__title">角丸・わずかな傾き・薄い質感——あえて「きっちりしすぎない」細部の工夫</p>
+              <p class="focus-card__desc">機械的で冷たい印象を与えないよう、要素の角を丸くしたり、カードをほんのわずかに傾けたりしています。背景にもごく薄い質感を加えることで、初めて訪れた人が無意識に安心感や親しみを持てるよう細部まで工夫しました。</p>
+            </div>
+          </div>
+          <div class="focus-card">
+            <div class="focus-card__img" style="background:linear-gradient(135deg,#533483,#e07a5f40);">✨</div>
+            <div class="focus-card__body">
+              <p class="focus-card__tag">心地よく進められる「スムーズな動きと演出」</p>
+              <p class="focus-card__title">滑らかな画面切り替え・進行度バー・結果直前の演出で期待感を高める</p>
+              <p class="focus-card__desc">質問に答えるたびに画面が滑らかに切り替わったり、進行度バーが進んだりと、操作していて気持ちいいと感じる「動き」を取り入れています。診断結果が出る直前にも専用の演出を挟むことで、途中でページを閉じられるのを防いでいます。</p>
+            </div>
+          </div>
+          <div class="focus-card">
+            <div class="focus-card__img" style="background:linear-gradient(135deg,#e07a5f40,#f5a62340);">👆</div>
+            <div class="focus-card__body">
+              <p class="focus-card__tag">最適なタイミングで現れる「お申し込みボタン」</p>
+              <p class="focus-card__title">気持ちが高まった瞬間に、迷わず次へ進めるスクロール連動の設計</p>
+              <p class="focus-card__desc">診断結果を読んで「やってみようかな」と気持ちが高まった瞬間に、迷わず次のステップへ進めるよう設計しています。記事を読んでいる間は邪魔にならず、それでいて常に見失わない位置にボタンがスッと現れるよう、スクロールに合わせて表示をコントロールしています。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <p class="detail-section__label">Reflection</p>
+        <h2 class="detail-section__heading">もし公開・計測できたら検証したいこと</h2>
+        <div class="reflection-list">
+          <div class="reflection-item">トップ画像を「人物の写真あり」と「サービス画面のみ」で比較してみたい。人が写っている方が申し込みが増える、という仮説を確かめたい。</div>
+          <div class="reflection-item">ボタンの言葉「まず話してみる（無料）」と「今すぐ相談する」を比べてみたい。やわらかい言葉の方が押してもらいやすいか検証したい。</div>
+          <div class="reflection-item">申し込みフォームを「1ページにまとめる」か「3ステップに分ける」かで、どちらが最後まで入力してもらいやすいかを試したい。</div>
+          <div class="reflection-item">受講者の声を「テキストのみ」と「短い動画＋テキスト」で比べてみたい。動画があると信頼感がどう変わるか確かめたい。</div>
+        </div>
+      </div>
+
+      <div class="detail-cta">
+        <p class="label label--light" style="justify-content:center;display:flex;">Let's Work Together</p>
+        <h3 class="detail-cta__heading">このような設計で、<br>あなたのLPを作りませんか？</h3>
+        <p class="detail-cta__sub">ご相談・お見積もりはすべてコ コ ナ ラにて。<br>どんな些細なご質問でもお気軽にどうぞ。</p>
+        <a href="https://coconala.com/" target="_blank" rel="noopener" class="btn btn-primary" style="margin:0 auto;">
+          ✦ まずはココナラで気軽に相談する（無料）
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <div style="padding-top:40px; padding-bottom:20px; display:flex; flex-direction:column; align-items:flex-start; gap:16px;">
+        <a href="NextGate.html" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-flex;">
+          実際の作品を見る
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <button class="back-btn" onclick="showMain()">← 作品一覧に戻る</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     DETAIL: BrainDelegate
+============================================================ -->
+<div class="detail-page" id="detail-bd">
+  <div class="detail-hero detail-hero--bd">
+    <div class="wrap">
+      <span class="detail-concept-note">✦ Concept Work — 架空の設計事例です</span>
+      <h1 class="detail-title">AIタスク管理アプリ<br>「BrainDelegate」LP</h1>
+      <p class="detail-summary">「AIって難しそう…」という不安を持つ人に、使い始めるまでのハードルをとことん下げるには何が必要か——その設計の考え方をまとめた作品です。</p>
+      <div class="detail-meta">
+        <div class="detail-meta__item">
+          <p class="detail-meta__key">Category</p>
+          <p class="detail-meta__val">AI SaaS / Productivity Tool</p>
+        </div>
+        <div class="detail-meta__item">
+          <p class="detail-meta__key">Role</p>
+          <p class="detail-meta__val">情報設計 / UX設計 / ビジュアルデザイン</p>
+        </div>
+        <div class="detail-meta__item">
+          <p class="detail-meta__key">Type</p>
+          <p class="detail-meta__val">Concept Work（架空案件）</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-body">
+    <div class="wrap">
+
+      <div class="detail-section">
+        <p class="detail-section__label">The Brief</p>
+        <h2 class="detail-section__heading">想定した依頼背景と課題</h2>
+        <table class="brief-table">
+          <tr><th>想定クライアント</th><td>音声入力×AIでタスクを自動整理するSaaSアプリの新規ユーザー獲得LP</td></tr>
+          <tr><th>想定ターゲット</th><td>20〜40代のフリーランス・独立系ビジネスパーソン。雑務に本業が圧迫されているが、AIツールを使いこなせるか不安な層</td></tr>
+          <tr><th>想定の課題</th><td>「便利そう」と思いつつ「自分の仕事に使える場面が想像できない」ことによる離脱。無料登録CVR: 1.2%前後（想定）</td></tr>
+          <tr><th>達成したいKPI</th><td>無料トライアル登録のCVR: 1.2% → 3.5% 以上への改善</td></tr>
+        </table>
+      </div>
+
+      <div class="detail-section">
+        <p class="detail-section__label">Hypothesis</p>
+        <h2 class="detail-section__heading">課題仮説とアプローチ</h2>
+        <div class="hypo-block">
+          <p class="hypo-block__label">設計の出発点となった考え</p>
+          <p class="hypo-block__text">「雑務に追われる人が登録しない理由はAIへの不信感より、『自分がこれを使っている場面』が想像できないことではないか。まず痛いほどわかる共感で心を開き、使ったあとの具体的な姿（毎日2時間の余白）を見せれば、登録のハードルは一気に下がるはず。」</p>
+        </div>
+        <p class="detail-section__text">この考えをもとに、「機能の説明」ではなく「感情の旅」を設計しました。8枚のスライドが問題→共感→解決→希少性→行動と感情の山を作り、ユーザーが自然に「今すぐ試したい」という状態に到達する構成にしています。</p>
+        <div class="psych-grid">
+          <div class="psych-card">
+            <p class="psych-card__name">「今日もまた、雑務だけで1日が終わる」</p>
+            <p class="psych-card__title">日常の痛みに言葉をあてることで、一瞬で「自分ごと」にする</p>
+            <p class="psych-card__desc">ターゲットが毎日感じている具体的な不満をそのまま最初の言葉にしました。「このページは自分のことだ」という共感が生まれると、人は自然とスクロールを続けます。</p>
+          </div>
+          <div class="psych-card">
+            <p class="psych-card__name">「スマホに『愚痴る』だけ」でハードルをゼロにする</p>
+            <p class="psych-card__title">機能説明ではなく「使うイメージの提供」。日常語がAIへの距離を縮める</p>
+            <p class="psych-card__desc">「音声入力でタスク管理」ではなく「スマホに愚痴るだけ」と表現することで、AIへの心理的なハードルを一言で取り除きます。言葉ひとつで「自分にもできそう」という感覚を作る設計です。</p>
+          </div>
+          <div class="psych-card">
+            <p class="psych-card__name">暗→温→赤→明の色の連鎖で感情を誘導する</p>
+            <p class="psych-card__title">スライドごとに背景色が変わり、読者の気持ちの状態も変わっていく</p>
+            <p class="psych-card__desc">問題の重さを表す暗いネイビー→共感の温もりを表すオレンジ→希少性の緊張感を表す赤→行動の清々しさを表す明るいブルーと、色が感情の地図として機能するよう設計しました。</p>
+          </div>
+          <div class="psych-card">
+            <p class="psych-card__name">カウントダウン×「本気の方限定」で行動を後押しする</p>
+            <p class="psych-card__title">「やってみようかな」という気持ちが、迷いなく登録に変わる瞬間を設計する</p>
+            <p class="psych-card__desc">気持ちが最も高まる最後のスライドで、24時間カウントダウンと手書き風の限定スタンプを配置しました。「いつでもできる」ではなく「今動く理由」を作ることで、離脱ではなく行動を促します。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <p class="detail-section__label">Design Focus</p>
+        <h2 class="detail-section__heading">こだわりポイント</h2>
+        <div class="focus-grid">
+          <div class="focus-card">
+            <div class="focus-card__img" style="background:linear-gradient(135deg,#0d1b2a,#415a77);">📖</div>
+            <div class="focus-card__body">
+              <p class="focus-card__tag">読者の心に寄り添う「ストーリー構成」</p>
+              <p class="focus-card__title">悩みへの共感からスタートし、自然な流れで興味を持ってもらう</p>
+              <p class="focus-card__desc">単にアプリの機能を並べるのではなく、「忙しくて自分の時間がない」という読者の悩みに共感するところからスタートしています。悩みの解決策としてサービスを提案することで、売り込み感をなくし、自然な流れで興味を持ってもらえる構成にしています。</p>
+            </div>
+          </div>
+          <div class="focus-card">
+            <div class="focus-card__img" style="background:linear-gradient(135deg,#415a77,#778da9);">🎨</div>
+            <div class="focus-card__body">
+              <p class="focus-card__tag">感情の動きに合わせた「色彩の変化」</p>
+              <p class="focus-card__title">暗いトーンから明るい色へ——読者の気持ちを視覚的にも前向きに引き上げる</p>
+              <p class="focus-card__desc">ページを読み進めるにつれて、背景の色が変化していくようにデザインしました。最初はストレスを表す暗いトーンから始まり、解決策を提示する場面では安心感のある明るい色へ変わることで、読者の気持ちを視覚的にも前向きに引き上げる工夫をしています。</p>
+            </div>
+          </div>
+          <div class="focus-card">
+            <div class="focus-card__img" style="background:linear-gradient(135deg,#778da9,#81b29a40);">✨</div>
+            <div class="focus-card__body">
+              <p class="focus-card__tag">最後まで飽きさせない「視線の誘導と動き」</p>
+              <p class="focus-card__title">フワッと現れる文字が、次を読みたくなる気持ちを生む</p>
+              <p class="focus-card__desc">スマホでスワイプした際、文字がフワッと少し遅れて表示されるなど、自然と次の文章を読みたくなるような「動き」を取り入れています。どこに注目すればいいかが直感的にわかるため、途中でページを離れられるのを防ぎ、最後までスムーズに読んでもらえます。</p>
+            </div>
+          </div>
+          <div class="focus-card">
+            <div class="focus-card__img" style="background:linear-gradient(135deg,#81b29a40,#0d1b2a);">👆</div>
+            <div class="focus-card__body">
+              <p class="focus-card__tag">迷わず行動できる「ボタン配置と後押し」</p>
+              <p class="focus-card__title">押しやすい位置・タイマーで、興味が行動に変わる瞬間を逃さない</p>
+              <p class="focus-card__desc">「申し込む」などの重要なボタンは、スマホを持ったときに一番親指で押しやすい位置と大きさに設計しています。また、「残り時間」を表示するタイマーを配置することで、興味を持ってくれた方の背中をそっと押し、実際の行動（登録や購入）に繋がりやすくしています。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <p class="detail-section__label">Reflection</p>
+        <h2 class="detail-section__heading">もし公開・計測できたら検証したいこと</h2>
+        <div class="reflection-list">
+          <div class="reflection-item">トップの動画を「アプリの画面のみ」と「人が実際に使っているシーン」で比較したい。人が映っている方が「自分も使えそう」と感じてもらえるか確かめたい。</div>
+          <div class="reflection-item">「プライバシーの説明」を「ページの最初の方」に置くか「中ほど」に置くかで結果が変わるか試したい。不安を早めに消した方が最後まで読んでもらえるか検証したい。</div>
+          <div class="reflection-item">登録方法を「メールアドレス入力」と「Googleアカウントでワンクリック」で比較したい。手間が減ることと、安心感のどちらが大事かを確かめたい。</div>
+          <div class="reflection-item">「今週○○人が登録」という数字を表示する/しないで、申し込み率がどう変わるか試したい。</div>
+        </div>
+      </div>
+
+      <div class="detail-cta">
+        <p class="label label--light" style="justify-content:center;display:flex;">Let's Work Together</p>
+        <h3 class="detail-cta__heading">このような設計で、<br>あなたのLPを作りませんか？</h3>
+        <p class="detail-cta__sub">ご相談・お見積もりはすべてコ コ ナ ラにて。<br>どんな些細なご質問でもお気軽にどうぞ。</p>
+        <a href="https://coconala.com/" target="_blank" rel="noopener" class="btn btn-primary" style="margin:0 auto;">
+          ✦ まずはココナラで気軽に相談する（無料）
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <div style="padding-top:40px; padding-bottom:20px; display:flex; flex-direction:column; align-items:flex-start; gap:16px;">
+        <a href="BrainDelegate.html" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-flex;">
+          実際の作品を見る
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <button class="back-btn" onclick="showMain()">← 作品一覧に戻る</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__inner">
+      <span class="footer__logo"><img src="SSDロゴデザイン.png" alt="Sunny Side Design" class="footer__logo-img" /></span>
+      <p class="footer__copy">© 2026 Sunny Side Design. All rights reserved.</p>
+      <a href="https://coconala.com/" target="_blank" rel="noopener" class="footer__cta">
+        ここから依頼する ↗
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+  /* ── Cursor ─────────────────────── */
+  const cur = document.getElementById('cur');
+  const curf = document.getElementById('cur-f');
+  let mx=0,my=0,fx=0,fy=0;
+
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  (function tick(){
+    fx+=(mx-fx)*.1; fy+=(my-fy)*.1;
+    curf.style.left=fx+'px'; curf.style.top=fy+'px';
+    requestAnimationFrame(tick);
+  })();
+  document.querySelectorAll('a,button,.wcard,.pcard,.scard').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+    el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+  });
+
+  /* ── Nav stuck ───────────────────── */
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>nav.classList.toggle('stuck',scrollY>50));
+
+  /* ── Reveal ──────────────────────── */
+  const ro=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('on');
+        const m=document.getElementById('heroMark');
+        if(m) m.classList.add('on');
+      }
+    });
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+  /* ── FAQ accordion ───────────────── */
+  function toggleFaq(btn){
+    const item=btn.parentElement;
+    const ans=item.querySelector('.faq__a');
+    const isOpen=item.classList.contains('open');
+    // close all
+    document.querySelectorAll('.faq__item.open').forEach(i=>{
+      i.classList.remove('open');
+      i.querySelector('.faq__a').style.maxHeight='0';
+    });
+    if(!isOpen){
+      item.classList.add('open');
+      ans.style.maxHeight=ans.scrollHeight+'px';
+    }
+  }
+
+  /* ── Smooth scroll ───────────────── */
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const t=document.querySelector(a.getAttribute('href'));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+    });
+  });
+
+  /* ── Mobile menu ─────────────────── */
+  document.getElementById('burger').addEventListener('click',()=>{
+    document.getElementById('mobileMenu').classList.toggle('open');
+  });
+  function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');}
+
+  /* ── Page transitions ────────────── */
+  function showDetail(id){
+    document.getElementById('mainPage').style.display='none';
+    document.querySelectorAll('.detail-page').forEach(p=>p.classList.remove('show'));
+    const target=document.getElementById('detail-'+id);
+    if(target){target.classList.add('show');}
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function showMain(){
+    document.getElementById('mainPage').style.display='block';
+    document.querySelectorAll('.detail-page').forEach(p=>p.classList.remove('show'));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  /* ── Number counter (Philosophy stats not used, ready if needed) */
+</script>
+</body>
+</html>

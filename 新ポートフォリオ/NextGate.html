@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>才能別・副業適性テスト｜NextGate</title>
+  <meta name="description" content="AIと1万人のデータが導き出す、あなただけの成功ルート。【完全無料】才能別・副業適性テストで眠れる才能を発見しよう。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Shippori+Mincho:wght@400;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ================================================================
+       リセット & CSS 変数
+    ================================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* ─── モーブ × ミント カラーパレット ─── */
+      --bg-base:       #FAF7FC;   /* Lavender White */
+      --bg-card:       #FFFFFF;
+      --bg-card-sub:   rgba(250,247,252,0.9);
+      --border-card:   rgba(44,44,44,0.10);
+      --accent-terra:  #8B5CF6;   /* Mauve Purple — Primary Accent / CTA */
+      --accent-sage:   #5EEAD4;   /* Mint — Secondary Accent */
+      --accent-grad:   linear-gradient(135deg, #8B5CF6 0%, #5EEAD4 100%);
+      --accent-cta:    #8B5CF6;
+      --accent-cta-glow: rgba(139,92,246,0.30);
+      --text-primary:  #2C2C2C;   /* Ink Black */
+      --text-secondary:#7A7A7A;
+      --text-em:       #8B5CF6;   /* Mauve emphasis */
+      --gold:          #A78BFA;   /* Soft purple — badge */
+      --success:       #0D9488;   /* Teal */
+      --warn:          #A78BFA;   /* Light purple warning */
+      --radius-sm:     8px;
+      --radius-md:     16px;
+      --radius-lg:     24px;
+      /* ─── DESIGN.md 7.Micro-interactions: ease-out-quart ─── */
+      --transition:    0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      --shadow-card:   0 4px 24px rgba(44,44,44,0.07);
+      --shadow-warm:   0 8px 32px rgba(139,92,246,0.14);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background:
+        radial-gradient(ellipse 90% 50% at 20% 0%, rgba(139,92,246,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 40% at 80% 90%, rgba(94,234,212,0.09) 0%, transparent 50%),
+        var(--bg-base);
+      color: var(--text-primary);
+      /* ─── DESIGN.md 5.Body: Noto Sans JP, line-height 1.7〜1.9 ─── */
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 15px;
+      line-height: 1.8;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ─── DESIGN.md 3.3 テクスチャとノイズ: フィルムノイズ Opacity 3% ─── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ================================================================
+       ビュー管理（show / hide）
+    ================================================================ */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ================================================================
+       ユーティリティ
+    ================================================================ */
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .grad-text {
+      background: var(--accent-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ─── DESIGN.md 準拠: Ink Black ベース強調 ─── */
+    strong, b { color: var(--text-em); font-weight: 700; }
+
+    /* ================================================================
+       KEYFRAMES
+    ================================================================ */
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 var(--accent-cta-glow), var(--shadow-warm);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 0 10px transparent, 0 10px 36px rgba(224,122,95,0.35);
+        transform: scale(1.02);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0.5; }
+      33%       { transform: translateY(-14px) translateX(6px); opacity: 0.8; }
+      66%       { transform: translateY(-6px) translateX(-8px); opacity: 0.6; }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes spinRev {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(-360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideOutLeft {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(-50px); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.6; }
+      50%       { opacity: 1; }
+    }
+
+    @keyframes loadingTextFade {
+      0%   { opacity: 0; transform: translateY(6px); }
+      15%  { opacity: 1; transform: translateY(0); }
+      80%  { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-6px); }
+    }
+
+    @keyframes progressPulse {
+      0%, 100% { filter: brightness(1); }
+      50%       { filter: brightness(1.15); }
+    }
+
+    /* ================================================================
+       ── VIEW: ファーストビュー ──
+    ================================================================ */
+    #view-fv {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 60px 20px 100px;
+      text-align: center;
+    }
+
+    /* 浮遊パーティクル（温かみのある淡色） */
+    .fv-particles {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: float linear infinite;
+    }
+
+    .fv-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    /* ─── バッジ: Terracotta ベース ─── */
+    .fv-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(139,92,246,0.10);
+      border: 1px solid rgba(139,92,246,0.30);
+      color: #7C3AED;
+      font-size: 11px;
+      font-weight: 700;
+      /* ─── DESIGN.md 5.Heading: letter-spacing 0.02〜0.05em ─── */
+      letter-spacing: 0.05em;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+    }
+    .fv-badge::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #8B5CF6;
+      border-radius: 50%;
+      animation: breathe 1.8s ease-in-out infinite;
+    }
+
+    .fv-lead {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.85;
+      margin-bottom: 20px;
+    }
+
+    /* ─── DESIGN.md 5.Heading: Shippori Mincho, letter-spacing 0.03em ─── */
+    .fv-h1 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(22px, 5.5vw, 30px);
+      font-weight: 800;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      letter-spacing: 0.03em;
+      color: var(--text-primary);
+    }
+
+    .fv-h1 .highlight {
+      position: relative;
+      display: inline-block;
+      background: var(--accent-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .fv-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+
+    .fv-free-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: clamp(13px, 3.5vw, 15px);
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 16px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── DESIGN.md 3.2 オーガニックシェイプ + 7.Hover: translateY(-4px) ─── */
+    .fv-btn {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto 16px;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      text-align: center;
+      border: none;
+      /* ─── オーガニックな非対称角丸 ─── */
+      border-radius: 40px 32px 40px 32px;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      animation: pulse 2.6s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+      box-shadow: var(--shadow-warm);
+    }
+    .fv-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -200%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+      animation: shimmer 3.5s ease-in-out infinite;
+    }
+    /* ─── DESIGN.md 7.Hover: translateY(-4px) ─── */
+    .fv-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(139,92,246,0.35);
+      animation: none;
+    }
+
+    .fv-note {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .fv-trust {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(44,44,44,0.10);
+      flex-wrap: wrap;
+    }
+    .fv-trust-item {
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .fv-trust-item .icon {
+      width: 16px;
+      height: 16px;
+      opacity: 0.55;
+    }
+
+    /* ================================================================
+       ── VIEW: クイズ ──
+    ================================================================ */
+    #view-quiz {
+      min-height: 100vh;
+      padding-bottom: 60px;
+      background: var(--bg-base);
+    }
+
+    /* プログレスバー */
+    .progress-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(249,246,240,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(44,44,44,0.09);
+      padding: 14px 20px;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .progress-label {
+      font-size: 12px;
+      font-weight: 700;
+      /* ─── DESIGN.md: letter-spacing 0.04em ─── */
+      letter-spacing: 0.04em;
+      color: var(--accent-terra);
+    }
+    .progress-label span {
+      font-family: 'Shippori Mincho', serif;
+    }
+    .progress-label-count {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+    .progress-track {
+      height: 5px;
+      background: rgba(44,44,44,0.10);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent-grad);
+      border-radius: 999px;
+      transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* クイズカード */
+    .quiz-wrap {
+      padding: 32px 20px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ─── DESIGN.md 3.1 脱グリッド: わずかな傾き ─── */
+    .quiz-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      box-shadow: var(--shadow-card);
+      /* 意図的な微細な揺らぎ */
+      transform: rotate(-0.4deg);
+    }
+    .quiz-card.slide-out {
+      animation: slideOutLeft 0.28s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+    .quiz-card.slide-in {
+      animation: slideInRight 0.32s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .quiz-q-num {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--accent-sage);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .quiz-q-num::before {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      height: 2px;
+      background: var(--accent-sage);
+      border-radius: 2px;
+    }
+
+    /* ─── DESIGN.md 5.Heading: Shippori Mincho ─── */
+    .quiz-q-text {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(15px, 4vw, 18px);
+      font-weight: 700;
+      line-height: 1.6;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      letter-spacing: 0.03em;
+    }
+
+    .quiz-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ─── DESIGN.md 2.1 Fittsの法則: 44px以上 ─── */
+    .choice-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(249,246,240,0.6);
+      border: 1px solid rgba(44,44,44,0.10);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      min-height: 44px;
+      cursor: pointer;
+      text-align: left;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+      color: var(--text-primary);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .choice-btn:hover {
+      background: rgba(139,92,246,0.07);
+      border-color: rgba(139,92,246,0.35);
+      transform: translateX(4px);
+      box-shadow: 0 2px 12px rgba(139,92,246,0.10);
+    }
+    .choice-btn:active {
+      transform: scale(0.98);
+    }
+    .choice-label {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      background: var(--accent-grad);
+      border-radius: 6px;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    /* ================================================================
+       ── VIEW: ローディング ──
+    ================================================================ */
+    #view-loading.active {
+      display: flex;
+    }
+
+    #view-loading {
+      min-height: 100vh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      background: var(--bg-base);
+    }
+
+    .loading-gears {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 40px;
+    }
+    .gear-outer {
+      position: absolute;
+      inset: 0;
+      animation: spin 5s linear infinite;
+    }
+    .gear-inner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 44px;
+      height: 44px;
+      margin: -22px 0 0 -22px;
+      animation: spinRev 3.5s linear infinite;
+    }
+
+    /* ─── DESIGN.md 5.Heading: Shippori Mincho ─── */
+    .loading-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--accent-sage);
+      margin-bottom: 16px;
+    }
+
+    .loading-text {
+      font-size: 15px;
+      color: var(--text-secondary);
+      min-height: 26px;
+      animation: loadingTextFade 1.2s ease-in-out;
+    }
+
+    .loading-bar-wrap {
+      width: 240px;
+      height: 4px;
+      background: rgba(44,44,44,0.10);
+      border-radius: 999px;
+      margin: 24px auto 0;
+      overflow: hidden;
+    }
+    .loading-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-grad);
+      border-radius: 999px;
+      transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* ================================================================
+       ── VIEW: 結果 ──
+    ================================================================ */
+    #view-result {
+      padding-bottom: 120px;
+      background: var(--bg-base);
+    }
+
+    /* 結果ヘッダー */
+    .result-header {
+      padding: 40px 20px 0;
+      max-width: 480px;
+      margin: 0 auto;
+      text-align: center;
+      animation: fadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .result-badge {
+      display: inline-block;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      border: 1px solid rgba(167,139,250,0.35);
+      background: rgba(167,139,250,0.08);
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    .result-type-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 16px;
+      border-radius: 24px 18px 24px 18px; /* ─── オーガニックシェイプ ─── */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-grad);
+      box-shadow: var(--shadow-warm);
+    }
+
+    /* ─── DESIGN.md 5.Heading: Shippori Mincho ─── */
+    .result-type-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(24px, 6vw, 32px);
+      font-weight: 800;
+      margin-bottom: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .result-type-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+    }
+
+    /* 結果カード */
+    .result-section {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 20px;
+      animation: fadeIn 0.7s 0.15s cubic-bezier(0.25, 1, 0.5, 1) both;
+    }
+
+    .result-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .result-card-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .result-card-title .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .card-strength .result-card-title .dot { background: var(--success); }
+    .card-risk     .result-card-title .dot { background: var(--warn); }
+    .card-motivation .result-card-title .dot { background: var(--accent-sage); }
+
+    .card-strength   { border-color: rgba(74,155,127,0.20); }
+    .card-risk       { border-color: rgba(200,136,58,0.20); }
+    .card-motivation { border-color: rgba(129,178,154,0.25); }
+
+    .result-card-title.strength-title   { color: var(--success); }
+    .result-card-title.risk-title       { color: var(--warn); }
+    .result-card-title.motivation-title { color: var(--accent-sage); }
+
+    /* ─── DESIGN.md 5.Body: line-height 1.8 ─── */
+    .result-card p {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text-secondary);
+    }
+    .result-card p strong { color: var(--text-primary); }
+
+    /* CTA セクション */
+    .cta-section {
+      max-width: 480px;
+      margin: 28px auto 0;
+      padding: 0 20px;
+      animation: fadeIn 0.8s 0.3s cubic-bezier(0.25, 1, 0.5, 1) both;
+    }
+
+    .cta-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(44,44,44,0.12), transparent);
+      margin-bottom: 28px;
+    }
+
+    .cta-counselor {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .counselor-avatar {
+      flex-shrink: 0;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--accent-grad);
+      overflow: hidden;
+      border: 2px solid rgba(139,92,246,0.25);
+      box-shadow: var(--shadow-warm);
+    }
+    .counselor-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .counselor-info strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+    .counselor-info span {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ─── DESIGN.md 5.Body: line-height 1.8 ─── */
+    .cta-lead {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .cta-lead strong { color: var(--text-primary); }
+
+    /* ─── 特典ボックス ─── */
+    .cta-gift {
+      background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(94,234,212,0.08));
+      border: 1px solid rgba(139,92,246,0.20);
+      /* ─── オーガニックシェイプ ─── */
+      border-radius: 24px 16px 24px 16px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-gift::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 80px; height: 80px;
+      background: linear-gradient(225deg, rgba(167,139,250,0.12), transparent);
+    }
+    .gift-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .gift-label::before { content: '🎁'; font-size: 14px; }
+    .gift-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    .gift-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* ─── DESIGN.md 5.Heading: Shippori Mincho ─── */
+    .cta-closer {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      line-height: 1.6;
+      letter-spacing: 0.03em;
+    }
+
+    .cta-note {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: 8px;
+      line-height: 1.7;
+    }
+
+    /* ─── インラインCTAボタン ─── */
+    #cta-inline-btn {
+      display: block;
+      width: 100%;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 900;
+      text-align: center;
+      border: none;
+      /* ─── オーガニックシェイプ ─── */
+      border-radius: 40px 32px 40px 32px;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      box-shadow: var(--shadow-warm);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 8px;
+      transition: transform var(--transition), box-shadow var(--transition);
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    #cta-inline-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -200%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent);
+      animation: shimmer 3.5s ease-in-out infinite;
+    }
+    #cta-inline-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(139,92,246,0.35);
+    }
+
+    /* スティッキーCTA */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: rgba(249,246,240,0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(44,44,44,0.09);
+      padding: 12px 20px 16px;
+      display: none;
+    }
+    .sticky-cta.visible { display: block; }
+    .sticky-cta-inner {
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    .sticky-cta-btn {
+      display: block;
+      width: 100%;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 900;
+      text-align: center;
+      border: none;
+      border-radius: 40px 32px 40px 32px;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      box-shadow: var(--shadow-warm);
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .sticky-cta-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -200%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent);
+      animation: shimmer 3.5s ease-in-out infinite;
+    }
+    .sticky-cta-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(139,92,246,0.35);
+    }
+    .sticky-cta-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    /* ================================================================
+       レスポンシブ（PC用調整）
+    ================================================================ */
+    @media (min-width: 600px) {
+      #view-fv { padding: 80px 40px 120px; }
+      .quiz-wrap { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       VIEW 1: ファーストビュー
+  ============================================================ -->
+  <section id="view-fv" class="view active">
+    <div class="fv-particles" id="fv-particles"></div>
+
+    <div class="fv-inner">
+      <div class="fv-badge">1万人のデータが導く、才能診断</div>
+
+      <p class="fv-lead">
+        「何か始めたい」でも<br>
+        「自分に何ができるか分からない」と<br>
+        立ち止まっているあなたへ。
+      </p>
+
+      <h1 class="fv-h1">
+        あなたの眠れる才能が、<br>
+        <span class="highlight">月収5万円の副収入</span>に<br>
+        変わるとしたら？
+      </h1>
+
+      <p class="fv-sub">
+        1万人のデータが導き出す、<br>あなただけの成功ルート。
+      </p>
+
+      <p class="fv-free-badge">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#A78BFA"/>
+        </svg>
+        【完全無料】才能別・副業適性テスト
+      </p>
+
+      <button class="fv-btn" onclick="startQuiz()">
+        診断をスタートする（約30秒で完了）
+      </button>
+      <p class="fv-note">※ 個人情報の入力なしで今すぐ始められます</p>
+
+      <div class="fv-trust">
+        <span class="fv-trust-item">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#7A7A7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          完全無料
+        </span>
+        <span class="fv-trust-item">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22S8 18 8 13V5L12 3L16 5V13C16 18 12 22 12 22Z" stroke="#7A7A7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          個人情報不要
+        </span>
+        <span class="fv-trust-item">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="#7A7A7A" stroke-width="2"/>
+            <path d="M12 6V12L16 14" stroke="#7A7A7A" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          約30秒
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       VIEW 2: クイズ
+  ============================================================ -->
+  <section id="view-quiz" class="view">
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span class="progress-label">才能を解析中… <span id="progress-pct">0</span>%</span>
+        <span class="progress-label-count">
+          Q<span id="progress-qnum">1</span> / 5
+        </span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="quiz-wrap">
+      <div class="quiz-card" id="quiz-card">
+        <!-- JS で動的挿入 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       VIEW 3: ローディング
+  ============================================================ -->
+  <section id="view-loading" class="view">
+    <div class="loading-gears">
+      <!-- 外側ギア -->
+      <svg class="gear-outer" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 8A42 42 0 1 1 8 50 42.047 42.047 0 0 1 50 8Z" stroke="rgba(139,92,246,0.15)" stroke-width="2"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="
+          M46 2h8v8.2a34 34 0 0 1 10.4 4.3l5.8-5.8 5.7 5.7-5.8 5.8A34 34 0 0 1 74.5 30l8.2-.1v8H74.5a34 34 0 0 1-4.4 10.4l5.8 5.8-5.7 5.6-5.8-5.8A34 34 0 0 1 54 57.7V66h-8v-8.3a34 34 0 0 1-10.4-4.3l-5.8 5.8-5.6-5.6 5.8-5.8A34 34 0 0 1 25.5 38l-8.2.1v-8l8.2.1A34 34 0 0 1 30 19.8l-5.8-5.8 5.6-5.6 5.8 5.8A34 34 0 0 1 46 10.2V2Z
+          M50 30a20 20 0 1 0 0 40 20 20 0 0 0 0-40Z
+        " fill="url(#gear-grad)"/>
+        <defs>
+          <linearGradient id="gear-grad" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#8B5CF6"/>
+            <stop offset="100%" stop-color="#5EEAD4"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <!-- 内側ギア -->
+      <svg class="gear-inner" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="
+          M19 0h6v5.4a16 16 0 0 1 5.6 2.3l3.8-3.8 4.2 4.3-3.8 3.8A16 16 0 0 1 37.2 18l5.5-.1V24l-5.5-.1a16 16 0 0 1-2.5 5.6l3.8 3.8-4.2 4.2-3.8-3.8A16 16 0 0 1 25 36v5H19v-5a16 16 0 0 1-5.6-2.3l-3.8 3.8-4.2-4.2 3.8-3.8A16 16 0 0 1 6.8 24l-5.5.1V18l5.5.1A16 16 0 0 1 9 12.5L5.2 8.7l4.2-4.3 3.8 3.8A16 16 0 0 1 19 5.4V0Z
+          M22 13a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z
+        " fill="url(#gear-grad2)"/>
+        <defs>
+          <linearGradient id="gear-grad2" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#5EEAD4"/>
+            <stop offset="100%" stop-color="#8B5CF6"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="loading-title">才能を解析しています</div>
+    <p class="loading-text" id="loading-text">あなたの回答データを解析中…</p>
+
+    <div class="loading-bar-wrap">
+      <div class="loading-bar-fill" id="loading-bar"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       VIEW 4: 結果 ＋ CTA
+  ============================================================ -->
+  <section id="view-result" class="view">
+
+    <div class="result-header">
+      <div class="result-badge">診断が完了しました</div>
+      <div class="result-type-icon" id="result-icon">
+        <!-- JS で挿入 -->
+      </div>
+      <h2 class="result-type-name grad-text" id="result-type-name"></h2>
+      <p class="result-type-sub" id="result-type-sub"></p>
+    </div>
+
+    <div class="result-section">
+      <div class="result-card card-strength">
+        <div class="result-card-title strength-title">
+          <span class="dot"></span>あなたの強み
+        </div>
+        <p id="result-strength"></p>
+      </div>
+
+      <div class="result-card card-risk">
+        <div class="result-card-title risk-title">
+          <span class="dot"></span>見落とされがちなリスク
+        </div>
+        <p id="result-risk"></p>
+      </div>
+
+      <div class="result-card card-motivation">
+        <div class="result-card-title motivation-title">
+          <span class="dot"></span>NextGate で変わる未来
+        </div>
+        <p id="result-motivation"></p>
+      </div>
+    </div>
+
+    <!-- CTA セクション -->
+    <div class="cta-section">
+      <div class="cta-divider"></div>
+
+      <div class="cta-counselor">
+        <div class="counselor-avatar">
+          <img src="田中エリコ.png" alt="田中エリコ — NextGate 認定キャリアアドバイザー" />
+        </div>
+        <div class="counselor-info">
+          <strong>あなたの担当：田中 エリコ</strong>
+          <span>NextGate 認定キャリアアドバイザー<br>副業成功支援実績 1,200名以上</span>
+        </div>
+      </div>
+
+      <p class="cta-lead">
+        この診断結果は、あなたの可能性の「ほんの入り口」に過ぎません。<br><br>
+        あなたの才能タイプを、実際の副業市場でどう活かせば<strong>「最短で稼げるのか」</strong>？
+        NextGateのプロフェッショナルが、あなたの診断スコアに基づき、
+        あなた専用の<strong>「副業スタート・ロードマップ」</strong>を無料で設計します。
+      </p>
+
+      <div class="cta-gift">
+        <div class="gift-label">本日限定 無料カウンセリング参加特典</div>
+        <p class="gift-text" id="gift-text">
+          診断結果に基づく「あなたの才能を120%活かす<br>副業ジャンル完全ガイド（PDF）」をプレゼント！
+        </p>
+        <p class="gift-sub">※ カウンセリング参加者全員にプレゼント</p>
+      </div>
+
+      <p class="cta-closer">
+        今のモヤモヤを、<br>今日ここで終わりにしませんか？
+      </p>
+
+      <button id="cta-inline-btn">
+        <span id="cta-inline-text">〇〇タイプ専用・無料カウンセリングの空き枠を見る</span>
+      </button>
+      <p class="cta-note">
+        ※ 無理な勧誘は一切ありません<br>
+        ※ カメラオフでの参加も可能です
+      </p>
+    </div>
+  </section>
+
+  <!-- スティッキーCTA（スクロール追従） -->
+  <div class="sticky-cta" id="sticky-cta">
+    <div class="sticky-cta-inner">
+      <button class="sticky-cta-btn" id="sticky-cta-btn">
+        <span id="sticky-cta-text">無料カウンセリングの空き枠を見る →</span>
+      </button>
+      <p class="sticky-cta-sub">※ 無理な勧誘なし・カメラオフ参加OK</p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       JavaScript
+  ============================================================ -->
+  <script>
+    /* ─── クイズデータ ─── */
+    const QUESTIONS = [
+      {
+        num: 1,
+        category: '行動特性',
+        text: '未経験の仕事を頼まれたとき、あなたの最初の行動は？',
+        choices: [
+          { key: 'A', text: 'まずは全体の計画と手順を頭の中で組み立てる' },
+          { key: 'B', text: 'とにかく手を動かしながら、やり方を模索する' },
+          { key: 'C', text: '過去の似た事例や、知っている人にヒントを求める' },
+          { key: 'D', text: '何のためにやるのか、目的や背景をじっくり考える' }
+        ]
+      },
+      {
+        num: 2,
+        category: '興味関心',
+        text: '休日の過ごし方で、一番「充実感」を感じるのは？',
+        choices: [
+          { key: 'A', text: '部屋の模様替えやDIYなど、目に見える形を作り上げたとき' },
+          { key: 'B', text: '友人や家族の相談に乗り、相手の笑顔を引き出せたとき' },
+          { key: 'C', text: '気になっていた本や動画を一気見し、知識を吸収したとき' },
+          { key: 'D', text: 'ドライブや旅行など、計画通りにスムーズな移動ができたとき' }
+        ]
+      },
+      {
+        num: 3,
+        category: '強み',
+        text: 'チーム内で「これなら誰にも負けない」と密かに思っていることは？',
+        choices: [
+          { key: 'A', text: 'トラブルが起きた時の、冷静な状況分析' },
+          { key: 'B', text: '誰も思いつかないような、斬新なアイデア出し' },
+          { key: 'C', text: '複雑な作業を、誰でもできるようにマニュアル化すること' },
+          { key: 'D', text: '落ち込んでいるメンバーのモチベーションを上げること' }
+        ]
+      },
+      {
+        num: 4,
+        category: '価値観',
+        text: '副業を始めるなら、絶対に避けたいストレスはどれ？',
+        choices: [
+          { key: 'A', text: '自分のペースで進められない、時間的な縛り' },
+          { key: 'B', text: '努力しても報酬が変わらない、理不尽な評価' },
+          { key: 'C', text: 'クレーム対応など、感情をすり減らす対人関係' },
+          { key: 'D', text: '単調で変化のない、ルーチンワークの繰り返し' }
+        ]
+      },
+      {
+        num: 5,
+        category: '未来逆算',
+        text: '3年後、あなたが最も手に入れていたい「理想の状態」は？',
+        choices: [
+          { key: 'A', text: '場所や時間に縛られず、PC1台で自由に稼ぐライフスタイル' },
+          { key: 'B', text: '自分の名前とスキルで指名され、感謝されるポジション' },
+          { key: 'C', text: '複数の収入源を持ち、会社に依存しない圧倒的な安心感' },
+          { key: 'D', text: '新しいビジネスやプロジェクトを自ら仕掛ける影響力' }
+        ]
+      }
+    ];
+
+    /* ─── 結果タイプデータ ─── */
+    const TYPES = {
+      A: {
+        name: '軍師タイプ',
+        sub: '論理と戦略で勝利を導くアナリスト',
+        icon: `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 28L20 8L32 28H8Z" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M14 22H26M11 26H29" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="20" cy="8" r="2" fill="white"/>
+        </svg>`,
+        strength: '情報を整理し、最短ルートを見つけ出す<strong>圧倒的な論理的思考力</strong>が、あなたの最大の武器です。複雑な問題を構造化して解決策を導き出す力は、多くの人にはない希少なスキルです。',
+        risk: '完璧を求めすぎるあまり「準備」だけで終わり、第一歩を踏み出せずにチャンスを逃す傾向があります。分析は力ですが、行動しない分析は価値を生みません。',
+        motivation: 'あなたの緻密な分析力は、<strong>データマーケティングや広告運用</strong>の世界で即戦力になります。NextGateで「正しい戦術」さえ学べば、月収10万円の壁は半年で突破可能です。',
+        ctaText: '軍師タイプ専用・無料カウンセリングの空き枠を見る'
+      },
+      B: {
+        name: 'クリエイタータイプ',
+        sub: '無から有を生み出す職人',
+        icon: `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 28L22 8L28 20L32 14" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="22" cy="8" r="2.5" fill="white"/>
+          <path d="M8 34H32" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M14 34V26M20 34V22M26 34V28" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>`,
+        strength: '一つのことに没頭できる<strong>集中力と細部へのこだわり、独自の世界観</strong>。あなたが作り出すものには、他の誰にも真似できないオリジナリティが宿っています。',
+        risk: '素晴らしいスキルを持ちながらも「安売り」してしまい、都合の良い労働力として搾取される危険性があります。スキルの価値を正しく市場へ提示する方法を学ぶことが急務です。',
+        motivation: 'あなたのクリエイティビティに「<strong>売れるWebデザイン（LP制作）</strong>」の方程式を掛け合わせましょう。NextGateのカリキュラムなら、あなたの美意識がそのまま高単価案件に直結します。',
+        ctaText: 'クリエイタータイプ専用・無料カウンセリングの空き枠を見る'
+      },
+      C: {
+        name: '伝道師タイプ',
+        sub: '人の心を動かすコミュニケーションマスター',
+        icon: `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="14" r="6" stroke="white" stroke-width="2.5"/>
+          <path d="M8 34C8 27.373 13.373 22 20 22C26.627 22 32 27.373 32 34" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M26 10L30 6M14 10L10 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M28 16L34 16M6 16L12 16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>`,
+        strength: '相手の感情を読み取り、言葉で人の背中を押す<strong>共感力と表現力</strong>。あなたの言葉には、人の行動を変える力が宿っています。',
+        risk: '他人のために時間とエネルギーを使いすぎ、自分自身の資産（スキルや収入）が構築しにくい状態にあります。「優しさ」を戦略的に使うことを学ぶ必要があります。',
+        motivation: 'あなたの共感力は「<strong>セールスライティング</strong>」や「<strong>SNS運用代行</strong>」において最強の武器です。NextGateで、その優しさを「収益化する仕組み」に変えませんか？',
+        ctaText: '伝道師タイプ専用・無料カウンセリングの空き枠を見る'
+      },
+      D: {
+        name: '調和者タイプ',
+        sub: '全体を俯瞰し円滑に回すマネージャー',
+        icon: `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="10" width="10" height="8" rx="2" stroke="white" stroke-width="2.5"/>
+          <rect x="22" y="10" width="10" height="8" rx="2" stroke="white" stroke-width="2.5"/>
+          <rect x="8" y="24" width="10" height="8" rx="2" stroke="white" stroke-width="2.5"/>
+          <rect x="22" y="24" width="10" height="8" rx="2" stroke="white" stroke-width="2.5"/>
+          <path d="M18 14H22M18 28H22M13 18V24M27 18V24" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>`,
+        strength: '全体のバランスを見極め、タスクを効率化して<strong>スムーズな進行を維持する管理能力</strong>。あなたがいるだけでチームが機能する、希少な存在です。',
+        risk: '常に「縁の下の力持ち」に徹してしまい、自分自身の市場価値や評価が上がらず、器用貧乏で終わるリスクがあります。自分の貢献を正当に評価させる術を身につけましょう。',
+        motivation: 'あなたの管理能力は「<strong>Webディレクション</strong>」や「<strong>オンライン秘書</strong>」として引く手あまたです。NextGateで案件進行のプロになれば、安定した継続案件で月収は確実に底上げされます。',
+        ctaText: '調和者タイプ専用・無料カウンセリングの空き枠を見る'
+      }
+    };
+
+    /* ─── 状態管理 ─── */
+    let currentQ = 0;
+    const answers = [];
+
+    /* ─── パーティクル生成（温かみのある淡色パレット） ─── */
+    function createParticles() {
+      const container = document.getElementById('fv-particles');
+      const colors = ['#8B5CF6', '#5EEAD4', '#A78BFA', '#7C3AED', '#99F6E4'];
+      for (let i = 0; i < 18; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 5 + 2;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const dur = Math.random() * 10 + 8;
+        const delay = Math.random() * 6;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        p.style.cssText = `
+          width:${size}px; height:${size}px;
+          left:${x}%; top:${y}%;
+          background:${color};
+          animation-duration:${dur}s;
+          animation-delay:${delay}s;
+          opacity:${Math.random() * 0.35 + 0.1};
+        `;
+        container.appendChild(p);
+      }
+    }
+    createParticles();
+
+    /* ─── ビュー切替 ─── */
+    function showView(id) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    /* ─── 効果音（Web Audio API） ─── */
+    let audioCtx = null;
+    function playSelectSound() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const notes = [440, 554, 659];
+        notes.forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.06);
+          osc.frequency.exponentialRampToValueAtTime(freq * 1.05, audioCtx.currentTime + i * 0.06 + 0.08);
+          gain.gain.setValueAtTime(0, audioCtx.currentTime + i * 0.06);
+          gain.gain.linearRampToValueAtTime(0.10, audioCtx.currentTime + i * 0.06 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.06 + 0.18);
+          osc.start(audioCtx.currentTime + i * 0.06);
+          osc.stop(audioCtx.currentTime + i * 0.06 + 0.2);
+        });
+      } catch (e) { /* 音声エラーは無視 */ }
+    }
+
+    /* ─── クイズ開始 ─── */
+    function startQuiz() {
+      showView('view-quiz');
+      renderQuestion(0);
+      document.getElementById('view-quiz').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ─── 質問描画 ─── */
+    function renderQuestion(index, animate = false) {
+      const q = QUESTIONS[index];
+      const pct = (index / QUESTIONS.length) * 100;
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-pct').textContent = Math.round(pct);
+      document.getElementById('progress-qnum').textContent = index + 1;
+
+      const card = document.getElementById('quiz-card');
+
+      if (animate) {
+        card.classList.add('slide-out');
+        setTimeout(() => {
+          card.classList.remove('slide-out');
+          injectQuestion(card, q, index);
+          card.classList.add('slide-in');
+          setTimeout(() => card.classList.remove('slide-in'), 380);
+        }, 260);
+      } else {
+        injectQuestion(card, q, index);
+      }
+    }
+
+    function injectQuestion(card, q, index) {
+      card.innerHTML = `
+        <div class="quiz-q-num">QUESTION ${String(index + 1).padStart(2, '0')} — ${q.category}</div>
+        <p class="quiz-q-text">${q.text}</p>
+        <div class="quiz-choices">
+          ${q.choices.map(c => `
+            <button class="choice-btn" onclick="selectAnswer('${c.key}', ${index})">
+              <span class="choice-label">${c.key}</span>
+              <span>${c.text}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    /* ─── 回答選択 ─── */
+    function selectAnswer(key, qIndex) {
+      playSelectSound();
+
+      // ボタン無効化（2重タップ防止）
+      document.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.style.pointerEvents = 'none';
+      });
+
+      // 選択ハイライト（Sage Green ベース）
+      const buttons = document.querySelectorAll('.choice-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent.trim().startsWith(key)) {
+          btn.style.background = 'rgba(94,234,212,0.15)';
+          btn.style.borderColor = 'rgba(94,234,212,0.55)';
+        }
+      });
+
+      answers.push(key);
+
+      if (qIndex + 1 < QUESTIONS.length) {
+        setTimeout(() => renderQuestion(qIndex + 1, true), 350);
+      } else {
+        // 最後の質問
+        document.getElementById('progress-fill').style.width = '100%';
+        document.getElementById('progress-pct').textContent = '100';
+        setTimeout(() => showLoading(), 500);
+      }
+    }
+
+    /* ─── ローディング演出 ─── */
+    function showLoading() {
+      showView('view-loading');
+      const texts = [
+        'あなたの回答データを解析中…',
+        '1万人のデータとマッチングしています…',
+        'あなたの「隠れた才能」が特定されました',
+        '結果を生成しています…'
+      ];
+      const textEl = document.getElementById('loading-text');
+      const barEl  = document.getElementById('loading-bar');
+      let step = 0;
+
+      barEl.style.width = '0%';
+
+      function nextText() {
+        if (step >= texts.length) {
+          setTimeout(showResult, 600);
+          return;
+        }
+        textEl.style.animation = 'none';
+        textEl.offsetHeight; // reflow
+        textEl.textContent = texts[step];
+        textEl.style.animation = 'loadingTextFade 1.1s ease-in-out';
+        barEl.style.width = ((step + 1) / texts.length * 100) + '%';
+        step++;
+        setTimeout(nextText, 1100);
+      }
+      nextText();
+    }
+
+    /* ─── タイプ判定 ─── */
+    function calcType() {
+      const count = { A: 0, B: 0, C: 0, D: 0 };
+      answers.forEach(a => count[a]++);
+
+      // 同数の場合は後半（Q4,Q5 = index 3,4）優先
+      const lateAnswers = answers.slice(3);
+      lateAnswers.forEach(a => count[a] += 0.5);
+
+      let best = 'A';
+      Object.keys(count).forEach(k => {
+        if (count[k] > count[best]) best = k;
+      });
+      return best;
+    }
+
+    /* ─── 結果表示 ─── */
+    function showResult() {
+      const typeKey = calcType();
+      const type    = TYPES[typeKey];
+
+      document.getElementById('result-icon').innerHTML         = type.icon;
+      document.getElementById('result-type-name').textContent  = type.name;
+      document.getElementById('result-type-sub').textContent   = type.sub;
+      document.getElementById('result-strength').innerHTML     = type.strength;
+      document.getElementById('result-risk').innerHTML         = type.risk;
+      document.getElementById('result-motivation').innerHTML   = type.motivation;
+      document.getElementById('cta-inline-text').textContent   = type.ctaText;
+      document.getElementById('sticky-cta-text').textContent   = `${type.name}専用・無料カウンセリングを見る →`;
+
+      showView('view-result');
+
+      // スティッキーCTA 表示タイミング
+      setTimeout(() => {
+        document.getElementById('sticky-cta').classList.add('visible');
+      }, 1200);
+    }
+
+    /* ─── スクロールでスティッキーCTA 制御 ─── */
+    document.addEventListener('scroll', () => {
+      const resultView = document.getElementById('view-result');
+      if (!resultView.classList.contains('active')) return;
+      const inlineBtn = document.getElementById('cta-inline-btn');
+      const rect = inlineBtn.getBoundingClientRect();
+      const stickyCta = document.getElementById('sticky-cta');
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        stickyCta.classList.remove('visible');
+      } else {
+        stickyCta.classList.add('visible');
+      }
+    });
+  </script>
+
+</body>
+</html>
